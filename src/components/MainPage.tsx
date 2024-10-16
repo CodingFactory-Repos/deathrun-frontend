@@ -7,7 +7,9 @@ interface MainPageProps {
 
 const MainPage = ({ children, componentStyle }: MainPageProps): JSX.Element => {
   return (
-    <div style={{ minHeight: "100vh", ...componentStyle }}>{children}</div>
+    <div style={{ minHeight: "100vh", padding: 20, ...componentStyle }}>
+      {children}
+    </div>
   );
 };
 
