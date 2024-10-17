@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import {useLocation, useNavigate} from "react-router-dom";
 import MainPage from "../components/MainPage.tsx";
 import usePlayerPosition from "../hooks/SocketHook.tsx";
+import router from "../routes/Router.tsx";
 
 const ItemTypes = {
   ICON: "icon",
@@ -67,7 +69,6 @@ const Cell = ({
         backgroundColor: isOver ? "lightgreen" : "white",
       }}
     >
-      {/* If the player is in this case place a red dot */}
       {hasPlayer && (
         <div
           style={{
@@ -114,9 +115,24 @@ const GameRows = ({
 
 const Game: React.FC = () => {
   const { isConnected, position, socket } = usePlayerPosition();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const player = searchParams.get("player");
+  const navigate = useNavigate();
 
-  console.log("Position", position);
-  console.log("isConnected", isConnected);
+
+  useEffect(() => {
+    socket.on("rooms:join", (data) => {
+      if (data.error) {
+        alert(data.error);
+        navigate("/");
+      }
+    });
+
+    if (player) {
+      socket.emit("rooms:join", { code: player, joinAs: "player" });
+    }
+  }, []);
 
   const handleDrop = (x: number, y: number, itemId: number) => {
     console.log(`Item ${itemId} dropped on cell (x: ${x}, y: ${y})`);
@@ -147,7 +163,6 @@ const Game: React.FC = () => {
               gridTemplateRows: "repeat(9, 2rem)",
             }}
           >
-            {/* Using x and y */}
             {Array.from({ length: 9 })
               .map((_, rowIndex) => rowIndex)
               .reverse()
