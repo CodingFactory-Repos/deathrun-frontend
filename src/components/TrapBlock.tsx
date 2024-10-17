@@ -1,18 +1,44 @@
-import React from "react";
+import React, { useState } from "react";
 import MainPage from "../components/MainPage.tsx";
-import tonneauIcon from '../assets/tonneau.ico';
-import flecheico from '../assets/fleche.ico';
-import filetico from '../assets/filet.ico';
-import relentirico from '../assets/relentir.ico';
+import TonneauIcon from '../assets/tonneau.ico';
+import FlecheIco from '../assets/fleche.ico';
+import FlecheIcoH from '../assets/flecheH.ico';
+import FlecheIcoG from '../assets/flecheG.ico';
+import FlecheIcoB from '../assets/flecheB.ico';
+import FiletIco from '../assets/filet.ico';
+import Relentirico from '../assets/relentir.ico';
+import Tourelle from '../assets/tourelle.gif';
+import AutorenewIcon from '@mui/icons-material/Autorenew';
 
-const traps = [
-  { name: 'Filets', image: filetico },
-  { name: 'Zone de Ralentissement', image: relentirico },
-  { name: 'Flèche', image:flecheico },
-  { name: 'Tonneau explosif', image: tonneauIcon }
+type Trap = {
+  name: string;
+  //image : string;
+  images: string[]; 
+};
+
+const traps: Trap[] = [
+  { name: 'Filets', images: [FiletIco] },
+  { name: 'Zone de Ralentissement', images: [Relentirico] },
+  { 
+    name: 'Flèche', 
+    images: [FlecheIco, FlecheIcoH, FlecheIcoG, FlecheIcoB] 
+  },
+  { name: 'Tonneau explosif', images: [TonneauIcon] },
+  { name: 'Tourelle', images: [Tourelle, TonneauIcon] }
 ];
 
 const TrapBlock: React.FC = () => {
+  // On crée un tableau d'index pour suivre l'image actuelle de chaque piège
+  const [imageIndexes, setImageIndexes] = useState<number[]>(new Array(traps.length).fill(0));
+
+  const handleImageChange = (trapIndex: number) => {
+    setImageIndexes(prevIndexes => {
+      const newIndexes = [...prevIndexes];
+      newIndexes[trapIndex] = (newIndexes[trapIndex] + 1) % traps[trapIndex].images.length;
+      return newIndexes;
+    });
+  };
+
   return (
     <MainPage
       componentStyle={{
@@ -31,8 +57,6 @@ const TrapBlock: React.FC = () => {
           backgroundColor: "white",
         }}
       >
-      
-        
         <h2 style={{ 
           textAlign: "center", 
           marginBottom: "20px", 
@@ -54,10 +78,18 @@ const TrapBlock: React.FC = () => {
             }}
           >
             <img
-              src={trap.image}
+              src={trap.images[imageIndexes[index]]} 
               alt={trap.name}
               style={{ width: "30px", height: "30px", marginRight: "10px" }}
             />
+
+          
+            {trap.images.length > 1 && (
+              <AutorenewIcon
+                onClick={() => handleImageChange(index)} 
+                style={{ width: "20px", height: "20px", cursor: "pointer", marginLeft: "20px" }}
+              />
+            )}
             <p>{trap.name}</p>
           </div>
         ))}
@@ -67,4 +99,3 @@ const TrapBlock: React.FC = () => {
 };
 
 export default TrapBlock;
-
