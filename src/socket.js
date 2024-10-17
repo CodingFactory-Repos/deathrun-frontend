@@ -1,5 +1,7 @@
-import { io } from 'socket.io-client';
+import { io } from "socket.io-client";
 
-const URL = process.env.SOCKET_URL ? process.env.SOCKET_URL : 'http://localhost:3000';
+const URL = import.meta.env.VITE_SOCKET_UNITY
+  ? import.meta.env.VITE_SOCKET_UNITY
+  : "http://localhost:3000";
 
 export const socket = io(URL);
