@@ -37,15 +37,17 @@ const Icon = ({ icon }: { icon: { id: number; label: string } }) => {
 };
 
 const Cell = ({
-  index,
+  x,
+  y,
   onDrop,
 }: {
-  index: number;
-  onDrop: (index: number, itemId: number) => void;
+  x: number;
+  y: number;
+  onDrop: (x: number, y: number, itemId: number) => void;
 }) => {
   const [{ isOver }, drop] = useDrop(() => ({
     accept: ItemTypes.ICON,
-    drop: (item: { id: number }) => onDrop(index, item.id),
+    drop: (item: { id: number }) => onDrop(x, y, item.id),
     collect: (monitor) => ({
       isOver: !!monitor.isOver(),
     }),
@@ -65,24 +67,24 @@ const Cell = ({
 };
 
 const GameRows = ({
-  index,
+  rowIndex,
   onDrop,
 }: {
-  index: number;
-  onDrop: (index: number, itemId: number) => void;
+  rowIndex: number;
+  onDrop: (x: number, y: number, itemId: number) => void;
 }) => {
   return (
     <>
-      {Array.from({ length: 9 }, (_, i) => (
-        <Cell key={i} index={index * 9 + i} onDrop={onDrop} />
+      {Array.from({ length: 9 }, (_, colIndex) => (
+        <Cell key={colIndex} x={colIndex} y={rowIndex} onDrop={onDrop} />
       ))}
     </>
   );
 };
 
 const Game: React.FC = () => {
-  const handleDrop = (index: number, itemId: number) => {
-    console.log(`Item ${itemId} dropped on cell ${index}`);
+  const handleDrop = (x: number, y: number, itemId: number) => {
+    console.log(`Item ${itemId} dropped on cell (x: ${x}, y: ${y})`);
   };
 
   return (
@@ -106,10 +108,14 @@ const Game: React.FC = () => {
             }}
           >
             {Array.from({ length: 9 })
-              .map((_, index) => index)
+              .map((_, rowIndex) => rowIndex)
               .reverse()
-              .map((index) => (
-                <GameRows index={index} key={index} onDrop={handleDrop} />
+              .map((rowIndex) => (
+                <GameRows
+                  rowIndex={rowIndex}
+                  key={rowIndex}
+                  onDrop={handleDrop}
+                />
               ))}
           </div>
           <div>
