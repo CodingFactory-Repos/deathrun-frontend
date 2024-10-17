@@ -95,7 +95,7 @@ const Game: React.FC = () => {
             marginBottom: 20,
           }}
         >
-          <h1>DeathGame</h1>
+          <h1>LoopTrap</h1>
         </div>
         <div style={{ width: "auto", backgroundColor: "" }}>
           <div
@@ -105,9 +105,12 @@ const Game: React.FC = () => {
               gridTemplateRows: "repeat(9, 2rem)",
             }}
           >
-            {Array.from({ length: 9 }).map((_, index) => (
-              <GameRows index={index} key={index} onDrop={handleDrop} />
-            ))}
+            {Array.from({ length: 9 })
+              .map((_, index) => index)
+              .reverse()
+              .map((index) => (
+                <GameRows index={index} key={index} onDrop={handleDrop} />
+              ))}
           </div>
           <div>
             {iconsData.map((icon) => (

@@ -4,7 +4,6 @@ export default function ErrorPage() {
   const error = useRouteError();
   console.error("error", error);
 
-  // Vérification du type de l'erreur
   const isHttpError = (
     error: any,
   ): error is { statusText?: string; message?: string } =>
