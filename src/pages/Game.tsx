@@ -3,6 +3,7 @@ import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import MainPage from "../components/MainPage.tsx";
 import usePlayerPosition from "../hooks/SocketHook.tsx";
+import TrapBlock from "../components/TrapBlock.tsx";
 
 const ItemTypes = {
   ICON: "icon",
@@ -139,7 +140,12 @@ const Game: React.FC = () => {
         >
           <h1>LoopTrap</h1>
         </div>
-        <div style={{ width: "auto", backgroundColor: "" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <div
             style={{
               display: "grid",
@@ -165,6 +171,7 @@ const Game: React.FC = () => {
               <Icon key={icon.id} icon={icon} />
             ))}
           </div>
+          <TrapBlock />
         </div>
       </MainPage>
     </DndProvider>
