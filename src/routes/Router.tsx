@@ -1,7 +1,8 @@
 import {createBrowserRouter} from "react-router-dom";
 import RedeemCode from "../pages/RedeemCode.tsx";
 import ErrorPage from "../pages/ErrorPage.tsx";
-import Game from "../pages/Game.tsx";
+//import Game from "../pages/Game.tsx";
+import TrapBlock from "../components/TrapBlock.tsx";
 
 const router = createBrowserRouter([
     {
@@ -11,7 +12,7 @@ const router = createBrowserRouter([
     },
     {
         path: "/game",
-        element: <Game />,
+        element: <TrapBlock />,
     }
 ]);
 
