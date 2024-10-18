@@ -1,5 +1,5 @@
 import React from "react";
-import { DndProvider, useDrag, useDrop } from "react-dnd";
+import { DndProvider, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import MainPage from "../components/MainPage.tsx";
 import usePlayerPosition from "../hooks/SocketHook.tsx";
@@ -14,29 +14,6 @@ const iconsData = [
   { id: 2, label: "🔥" },
   { id: 3, label: "🌟" },
 ];
-
-const Icon = ({ icon }: { icon: { id: number; label: string } }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.ICON,
-    item: { id: icon.id },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
-
-  return (
-    <div
-      ref={drag}
-      style={{
-        opacity: isDragging ? 0.5 : 1,
-        fontSize: "2rem",
-        cursor: "move",
-      }}
-    >
-      {icon.label}
-    </div>
-  );
-};
 
 const Cell = ({
   x,
@@ -166,12 +143,7 @@ const Game: React.FC = () => {
                 />
               ))}
           </div>
-          <div>
-            {iconsData.map((icon) => (
-              <Icon key={icon.id} icon={icon} />
-            ))}
-          </div>
-          <TrapBlock />
+          <TrapBlock trapItem={iconsData} />
         </div>
       </MainPage>
     </DndProvider>
