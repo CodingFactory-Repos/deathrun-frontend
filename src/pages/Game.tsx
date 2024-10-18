@@ -1,10 +1,8 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { DndProvider, useDrag, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
-import {useLocation, useNavigate} from "react-router-dom";
 import MainPage from "../components/MainPage.tsx";
 import usePlayerPosition from "../hooks/SocketHook.tsx";
-import router from "../routes/Router.tsx";
 
 const ItemTypes = {
   ICON: "icon",
@@ -15,29 +13,6 @@ const iconsData = [
   { id: 2, label: "🔥" },
   { id: 3, label: "🌟" },
 ];
-
-const Icon = ({ icon }: { icon: { id: number; label: string } }) => {
-  const [{ isDragging }, drag] = useDrag(() => ({
-    type: ItemTypes.ICON,
-    item: { id: icon.id },
-    collect: (monitor) => ({
-      isDragging: !!monitor.isDragging(),
-    }),
-  }));
-
-  return (
-    <div
-      ref={drag}
-      style={{
-        opacity: isDragging ? 0.5 : 1,
-        fontSize: "2rem",
-        cursor: "move",
-      }}
-    >
-      {icon.label}
-    </div>
-  );
-};
 
 const Cell = ({
   x,
@@ -69,6 +44,7 @@ const Cell = ({
         backgroundColor: isOver ? "lightgreen" : "white",
       }}
     >
+      {/* If the player is in this case place a red dot */}
       {hasPlayer && (
         <div
           style={{
@@ -115,35 +91,9 @@ const GameRows = ({
 
 const Game: React.FC = () => {
   const { isConnected, position, socket } = usePlayerPosition();
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const player = searchParams.get("player");
-  const navigate = useNavigate();
-  let roomInformations: { code: string; creator: string; players: string[]; gods: string[] };
 
-
-  useEffect(() => {
-    socket.on("rooms:join", (data: { code: string; creator: string; players: string[]; gods: string[] } | { error: string }) => {
-      if ("error" in data) {
-        alert(data.error);
-        navigate("/");
-      } else {
-        roomInformations = data;
-        console.log("Joined room", roomInformations);
-      }
-
-      // Après avoir rejoint la room plus besoin de l'écouter.
-      socket.on("rooms:events", (data: {code: string, creator: string, players: string[], gods: string[]}) => {
-        roomInformations = data;
-        console.log("Room events", roomInformations);
-      });
-      socket.off("rooms:join");
-    });
-
-    if (player) {
-      socket.emit("rooms:join", { code: player, joinAs: "god" });
-    }
-  }, []);
+  console.log("Position", position);
+  console.log("isConnected", isConnected);
 
   const handleDrop = (x: number, y: number, itemId: number) => {
     console.log(`Item ${itemId} dropped on cell (x: ${x}, y: ${y})`);
@@ -166,7 +116,12 @@ const Game: React.FC = () => {
         >
           <h1>LoopTrap</h1>
         </div>
-        <div style={{ width: "auto", backgroundColor: "" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
           <div
             style={{
               display: "grid",
@@ -174,6 +129,7 @@ const Game: React.FC = () => {
               gridTemplateRows: "repeat(9, 2rem)",
             }}
           >
+            {/* Using x and y */}
             {Array.from({ length: 9 })
               .map((_, rowIndex) => rowIndex)
               .reverse()
@@ -186,11 +142,7 @@ const Game: React.FC = () => {
                 />
               ))}
           </div>
-          <div>
-            {iconsData.map((icon) => (
-              <Icon key={icon.id} icon={icon} />
-            ))}
-          </div>
+          <TrapBlock trapItem={iconsData} />
         </div>
       </MainPage>
     </DndProvider>
