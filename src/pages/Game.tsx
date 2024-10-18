@@ -112,14 +112,14 @@ const Game: React.FC = () => {
             } else {
                 roomInformations = data;
                 console.log("Joined room", roomInformations);
-            }
 
-            // Après avoir rejoint la room plus besoin de l'écouter.
-            socket.on("rooms:events", (data: { code: string, creator: string, players: string[], gods: string[] }) => {
-                roomInformations = data;
-                console.log("Room events", roomInformations);
-            });
-            socket.off("rooms:join");
+                // Après avoir rejoint la room plus besoin de l'écouter.
+                socket.on("rooms:events", (data: { code: string, creator: string, players: string[], gods: string[] }) => {
+                    roomInformations = data;
+                    console.log("Room events", roomInformations);
+                });
+                socket.off("rooms:join");
+            }
         });
 
         if (room) {
