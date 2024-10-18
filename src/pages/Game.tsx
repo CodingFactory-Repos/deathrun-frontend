@@ -118,8 +118,9 @@ const Game: React.FC = () => {
                     roomInformations = data;
                     console.log("Room events", roomInformations);
                 });
-                socket.off("rooms:join");
             }
+
+            socket.off("rooms:join");
         });
 
         if (room) {
