@@ -119,18 +119,29 @@ const Game: React.FC = () => {
   const searchParams = new URLSearchParams(location.search);
   const player = searchParams.get("player");
   const navigate = useNavigate();
+  let roomInformations: { code: string; creator: string; players: string[]; gods: string[] };
 
 
   useEffect(() => {
-    socket.on("rooms:join", (data) => {
-      if (data.error) {
+    socket.on("rooms:join", (data: { code: string; creator: string; players: string[]; gods: string[] } | { error: string }) => {
+      if ("error" in data) {
         alert(data.error);
         navigate("/");
+      } else {
+        roomInformations = data;
+        console.log("Joined room", roomInformations);
       }
+
+      // Après avoir rejoint la room plus besoin de l'écouter.
+      socket.on("rooms:events", (data: {code: string, creator: string, players: string[], gods: string[]}) => {
+        roomInformations = data;
+        console.log("Room events", roomInformations);
+      });
+      socket.off("rooms:join");
     });
 
     if (player) {
-      socket.emit("rooms:join", { code: player, joinAs: "player" });
+      socket.emit("rooms:join", { code: player, joinAs: "god" });
     }
   }, []);
 
