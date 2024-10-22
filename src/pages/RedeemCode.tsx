@@ -5,9 +5,11 @@ import MainPage from "../components/MainPage.tsx";
 import backgroundH from "../assets/images/background.gif";
 import { Button, Modal, TextField } from "@mui/material";
 import GodSelector from "../components/GodSelector.tsx";
+import axios from "axios";
 
 const RedeemCode: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
+  const [availableGods, setAvailableGods] = useState([]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
@@ -18,8 +20,20 @@ const RedeemCode: React.FC = () => {
   }, [inputValue]);
 
   const [open, setOpen] = React.useState(false);
-  const handleOpen = () => setOpen(true);
+  // const handleOpen = () => setOpen(true);
   const handleClose = () => setOpen(false);
+
+  const joinRoom = () => {
+    try {
+      axios.get(`http://localhost:3000/room/${inputValue}`).then((res) => {
+        console.log(res);
+        setAvailableGods(res.data.availableGods);
+        setOpen(true);
+      });
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <MainPage
@@ -65,7 +79,8 @@ const RedeemCode: React.FC = () => {
           variant="contained"
           // component={Link}
           // to={`/game?player=${inputValue}`}
-          onClick={handleOpen}
+          // onClick={handleOpen}
+          onClick={() => joinRoom()}
           disabled={!isValueValid}
           style={{
             color: "white",
@@ -80,7 +95,7 @@ const RedeemCode: React.FC = () => {
           aria-labelledby="modal-modal-title"
           aria-describedby="modal-modal-description"
         >
-          <GodSelector />
+          <GodSelector availableGods={availableGods} roomCode={inputValue} />
         </Modal>
       </div>
     </MainPage>

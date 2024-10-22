@@ -3,7 +3,7 @@ import { DndProvider, useDrop } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import MainPage from "../components/MainPage.tsx";
 import usePlayerPosition from "../hooks/SocketHook.tsx";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import TrapBlock from "../components/TrapBlock.tsx";
 import CrossBowDown from "../assets/images/crossbow_down.png";
 import CrossBowLeft from "../assets/images/crossbow_left.png";
@@ -96,12 +96,16 @@ const GameRows = ({
 
 const Game: React.FC = () => {
   const { isConnected, position, socket } = usePlayerPosition();
+  const location = useLocation();
   const navigate = useNavigate();
   const searchParams = new URLSearchParams(location.search);
   const room = searchParams.get("player");
 
+  const { godId } = location.state;
+
   console.log("Position", position);
   console.log("isConnected", isConnected);
+  console.log("godId", godId);
 
   let roomInformations: {
     code: string;
@@ -147,7 +151,7 @@ const Game: React.FC = () => {
     );
 
     if (room) {
-      socket.emit("rooms:join", { code: room, joinAs: "god" });
+      socket.emit("rooms:join", { code: room, joinAs: "god", godId: godId });
     } else {
       navigate("/");
     }
