@@ -12,6 +12,7 @@ interface roomInformations {
     players: string[];
     gods: string[];
     props: { x: number; y: number }[];
+    traps: { x: number; y: number }[];
 }
 
 const ItemTypes = {
@@ -30,12 +31,14 @@ const Cell = ({
     onDrop,
     hasPlayer,
     hasProps,
+    hasTraps,
 }: {
     x: number;
     y: number;
     onDrop: (x: number, y: number, itemId: number) => void;
     hasPlayer: boolean;
     hasProps: boolean;
+    hasTraps: boolean;
 }) => {
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.ICON,
@@ -53,8 +56,8 @@ const Cell = ({
                 width: '2rem',
                 height: '2rem',
                 position: 'relative',
-                backgroundColor: hasProps ? 'gray' : isOver ? 'lightgreen' : 'white',
-                pointerEvents: hasProps ? 'none' : 'auto',
+                backgroundColor: hasProps ? 'gray' : hasTraps ? 'darkred' : isOver ? 'lightgreen' : 'white',
+                pointerEvents: hasProps || hasTraps || hasPlayer ? 'none' : 'auto',
             }}>
             {/* If the player is in this case place a red dot */}
             {hasPlayer && (
@@ -80,11 +83,13 @@ const GameRows = ({
     playerPosition,
     onDrop,
     propsPlaced,
+    trapsPlaced,
 }: {
     rowIndex: number;
     playerPosition: { x: number; y: number };
     onDrop: (x: number, y: number, itemId: number) => void;
     propsPlaced: [{ x: number; y: number }];
+    trapsPlaced: [{ x: number; y: number }];
 }) => {
     return (
         <>
@@ -100,6 +105,9 @@ const GameRows = ({
                     hasProps={propsPlaced.some(
                         prop => prop.x === colIndex && prop.y === rowIndex,
                     )}
+                    hasTraps={trapsPlaced.some(
+                        trap => trap.x === colIndex && trap.y === rowIndex,
+                    )}
                 />
             ))}
         </>
@@ -107,15 +115,22 @@ const GameRows = ({
 };
 
 const Game: React.FC = () => {
-    const { isConnected, position, socket } = usePlayerPosition();
+    const { isConnected, position, socket, traps } = usePlayerPosition();
     const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     const room = searchParams.get('player');
     const [props, setProps] = useState([{ x: 0, y: 0 }]);
+    const [trapsList, setTrapsList] = useState([{ x: 0, y: 0 }]);
 
     console.log('Position', position);
     console.log('isConnected', isConnected);
     console.log('Props', props);
+
+    useEffect(() => {
+        if (traps) {
+            setTrapsList(traps);
+        }
+    }, [traps]);
 
     let roomInformations: roomInformations;
 
@@ -137,6 +152,7 @@ const Game: React.FC = () => {
                     console.log('Joined room', roomInformations);
 
                     setProps(roomInformations.props);
+                    setTrapsList(roomInformations.traps || []);
 
                     // Après avoir rejoint la room plus besoin de l'écouter.
                     socket.on('rooms:events', (data: roomInformations) => {
@@ -197,6 +213,7 @@ const Game: React.FC = () => {
                                     key={rowIndex}
                                     playerPosition={position}
                                     propsPlaced={props}
+                                    trapsPlaced={trapsList}
                                     onDrop={handleDrop}
                                 />
                             ))}
