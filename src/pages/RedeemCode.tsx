@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import "../styles/redeemCode.css";
-import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import MainPage from "../components/MainPage.tsx";
-import backgroundH from "../assets/background.gif";
-import { Button, TextField } from "@mui/material";
+import backgroundH from "../assets/images/background.gif";
+import { Button, Modal, TextField } from "@mui/material";
+import GodSelector from "../components/GodSelector.tsx";
 
 const RedeemCode: React.FC = () => {
   const [inputValue, setInputValue] = useState("");
@@ -16,6 +16,10 @@ const RedeemCode: React.FC = () => {
   const isValueValid = useMemo(() => {
     return inputValue.length > 0;
   }, [inputValue]);
+
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => setOpen(true);
+  const handleClose = () => setOpen(false);
 
   return (
     <MainPage
@@ -59,16 +63,25 @@ const RedeemCode: React.FC = () => {
         />
         <Button
           variant="contained"
-          component={Link}
-          to={`/game?player=${inputValue}`}
+          // component={Link}
+          // to={`/game?player=${inputValue}`}
+          onClick={handleOpen}
           disabled={!isValueValid}
           style={{
             color: "white",
             textDecoration: "none",
           }}
         >
-          Be a GOD
+          Choose your GOD
         </Button>
+        <Modal
+          open={open}
+          onClose={handleClose}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <GodSelector />
+        </Modal>
       </div>
     </MainPage>
   );

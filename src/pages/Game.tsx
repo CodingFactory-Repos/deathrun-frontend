@@ -5,9 +5,9 @@ import MainPage from "../components/MainPage.tsx";
 import usePlayerPosition from "../hooks/SocketHook.tsx";
 import { useNavigate } from "react-router-dom";
 import TrapBlock from "../components/TrapBlock.tsx";
-import CrossBowDown from "../assets/crossbow_down.png";
-import CrossBowLeft from "../assets/crossbow_left.png";
-import CrossBowUp from "../assets/crossbow_up.png";
+import CrossBowDown from "../assets/images/crossbow_down.png";
+import CrossBowLeft from "../assets/images/crossbow_left.png";
+import CrossBowUp from "../assets/images/crossbow_up.png";
 
 const ItemTypes = {
   ICON: "icon",
