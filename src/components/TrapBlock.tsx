@@ -24,7 +24,10 @@ interface TrapBlock {
   trapItem: {
     id: number;
     label: string;
+    name: string;
+    description: string;
   }[];
+  onSelectTrap: (icon: { id: number; label: string; name: string; description: string }) => void;
 }
 
 const traps: Trap[] = [
@@ -39,7 +42,7 @@ const traps: Trap[] = [
   { name: "Tourelle", images: [Tourelle, TonneauIcon] },
 ];
 
-const Icon = ({ icon }: { icon: { id: number; label: string } }) => {
+const Icon = ({ icon, onSelectTrap }: { icon: { id: number; label: string; name: string; description: string }; onSelectTrap: (icon: { id: number; label: string; name: string; description: string }) => void }) => {
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: ItemTypes.ICON,
     item: { id: icon.id },
@@ -53,6 +56,7 @@ const Icon = ({ icon }: { icon: { id: number; label: string } }) => {
       <DragPreviewImage connect={preview} src={ReactSVG} />
       <div
         ref={drag}
+        onClick={() => onSelectTrap(icon)} // Appelle onSelectTrap au clic
         style={{
           opacity: isDragging ? 0.5 : 1,
           fontSize: "2rem",
@@ -63,7 +67,6 @@ const Icon = ({ icon }: { icon: { id: number; label: string } }) => {
           borderRadius: "5px",
           padding: "10px",
           marginBottom: "10px",
-          // minWidth: 100,
         }}
       >
         {icon.label}
@@ -72,8 +75,7 @@ const Icon = ({ icon }: { icon: { id: number; label: string } }) => {
   );
 };
 
-const TrapBlock: React.FC<TrapBlock> = ({ trapItem }) => {
-  // On crée un tableau d'index pour suivre l'image actuelle de chaque piège
+const TrapBlock: React.FC<TrapBlock> = ({ trapItem, onSelectTrap }) => {
   const [imageIndexes, setImageIndexes] = useState<number[]>(
     new Array(traps.length).fill(0),
   );
@@ -109,44 +111,9 @@ const TrapBlock: React.FC<TrapBlock> = ({ trapItem }) => {
           TRAPS
         </h2>
 
-        {
-          //     traps.map((trap, index) => (
-          //   <div
-          //     key={index}
-          //     style={{
-          //       display: "flex",
-          //       alignItems: "center",
-          //       border: "1px solid #000",
-          //       borderRadius: "5px",
-          //       padding: "10px",
-          //       marginBottom: "10px",
-          //     }}
-          //   >
-          //     <img
-          //       src={trap.images[imageIndexes[index]]}
-          //       alt={trap.name}
-          //       style={{ width: "30px", height: "30px", marginRight: "10px" }}
-          //     />
-          //
-          //     {trap.images.length > 1 && (
-          //       <AutorenewIcon
-          //         onClick={() => handleImageChange(index)}
-          //         style={{
-          //           width: "20px",
-          //           height: "20px",
-          //           cursor: "pointer",
-          //           marginLeft: "20px",
-          //         }}
-          //       />
-          //     )}
-          //     <p>{trap.name}</p>
-          //   </div>
-          // ))
-        }
-
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           {trapItem.map((icon) => (
-            <Icon key={icon.id} icon={icon} />
+            <Icon key={icon.id} icon={icon} onSelectTrap={onSelectTrap} />
           ))}
         </div>
       </div>
