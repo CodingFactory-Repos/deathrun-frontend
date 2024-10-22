@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Relentirico from "../assets/relentir.ico";
+import Relentirico from "../assets/images/relentir.ico";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { useDrag, DragPreviewImage } from "react-dnd";
 
