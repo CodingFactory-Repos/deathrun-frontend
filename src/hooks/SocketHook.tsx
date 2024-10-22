@@ -4,6 +4,7 @@ import { socket } from "../socket";
 function usePlayerPosition() {
   const [isConnected, setIsConnected] = useState(socket.connected);
   const [position, setPosition] = useState({ x: 0, y: 0 });
+  const [traps, setTraps] = useState([{ x: 0, y: 0 }]);
 
   useEffect(() => {
     function onConnect() {
@@ -29,12 +30,19 @@ function usePlayerPosition() {
       setPosition({ x: Math.floor(data.x), y: Math.floor(data.y) });
     }
 
+    function onTrapsList(data: { x: number; y: number }[]) {
+      console.log("Traps list", data);
+      setTraps(data);
+    }
+
     socket.on("connect", onConnect);
     socket.on("disconnect", onDisconnect);
     socket.on("players:move", onPositionChange);
+    socket.on("traps:list", onTrapsList);
+
   }, []);
 
-  return { isConnected, position, socket };
+  return { isConnected, position, socket, traps };
 }
 
 export default usePlayerPosition;
