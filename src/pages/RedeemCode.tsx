@@ -3,7 +3,7 @@ import "../styles/redeemCode.css";
 import { Link } from "react-router-dom";
 import { useMemo } from "react";
 import MainPage from "../components/MainPage.tsx";
-import backgroundH from "../assets/background.gif";
+import background from "../assets/images/background.gif";
 import { Button, TextField } from "@mui/material";
 
 const RedeemCode: React.FC = () => {
@@ -23,7 +23,7 @@ const RedeemCode: React.FC = () => {
         justifyContent: "center",
         alignItems: "center",
         display: "flex",
-        backgroundImage: `url(${backgroundH})`,
+        backgroundImage: `url(${background})`,
         backgroundSize: "cover",
       }}
     >
