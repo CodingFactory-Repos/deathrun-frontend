@@ -10,15 +10,9 @@ import Chat from "../components/ChatModal.tsx";
 import CrossBowDown from "../assets/images/crossbow_down.png";
 import CrossBowLeft from "../assets/images/crossbow_left.png";
 import CrossBowUp from "../assets/images/crossbow_up.png";
-
-interface roomInformations {
-    code: string;
-    creator: string;
-    players: string[];
-    gods: string[];
-    props: { x: number; y: number }[];
-    traps: { x: number; y: number }[];
-}
+import toast from "react-hot-toast";
+import { RoomInformations } from "../types/RoomTypes.ts";
+import gameBackground from "../assets/images/game_background.gif";
 
 const ItemTypes = {
     ICON: "icon",
@@ -27,7 +21,7 @@ const ItemTypes = {
 const iconsData = [
     {
         id: 1,
-        label: "⚡",
+        label: "CrossBow",
         images: [CrossBowLeft],
         description:
             "La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus v La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus ",
@@ -73,7 +67,7 @@ const Cell = ({
         <div
             ref={drop}
             style={{
-                border: "solid 1px black",
+                border: "solid 0.1px black",
                 width: "2rem",
                 height: "2rem",
                 position: "relative",
@@ -153,7 +147,7 @@ const Game: React.FC = () => {
     const [props, setProps] = useState([{ x: 0, y: 0 }]);
     const [trapsList, setTrapsList] = useState([{ x: 0, y: 0 }]);
 
-    const { godId } = location.state;
+    const { godId } = location.state ? location.state : { godId: 0 };
 
     console.log("Position", position);
     console.log("isConnected", isConnected);
@@ -166,20 +160,20 @@ const Game: React.FC = () => {
         }
     }, [traps]);
 
-    let roomInformations: roomInformations;
+    let roomInformations: RoomInformations;
 
     useEffect(() => {
         socket.on(
             "rooms:join",
             (
                 data:
-                    | roomInformations
+                    | RoomInformations
                     | {
                           error: string;
                       }
             ) => {
                 if ("error" in data) {
-                    alert(data.error);
+                    toast.error(data.error);
                     navigate("/");
                 } else {
                     roomInformations = data;
@@ -189,7 +183,7 @@ const Game: React.FC = () => {
                     setTrapsList(roomInformations.traps || []);
 
                     // Après avoir rejoint la room plus besoin de l'écouter.
-                    socket.on("rooms:events", (data: roomInformations) => {
+                    socket.on("rooms:events", (data: RoomInformations) => {
                         roomInformations = data;
                         console.log("Room events", roomInformations);
                     });
@@ -223,15 +217,21 @@ const Game: React.FC = () => {
 
     return (
         <DndProvider backend={HTML5Backend}>
-            <MainPage>
+            <MainPage
+                componentStyle={{
+                    backgroundImage: `url(${gameBackground})`,
+                    backgroundSize: "cover",
+                }}
+            >
                 <div
                     style={{
                         display: "flex",
                         justifyContent: "center",
                         marginBottom: 20,
+                        color: "white",
                     }}
                 >
-                    <h1>LoopTrap</h1>
+                    <h1>Godbless</h1>
                 </div>
                 <div
                     style={{
@@ -243,11 +243,11 @@ const Game: React.FC = () => {
                         style={{
                             display: "grid",
                             gridTemplateColumns: "repeat(9, 2rem)",
-                            gridTemplateRows: "repeat(9, 2rem)",
+                            gridTemplateRows: "repeat(23, 2rem)",
                         }}
                     >
                         {/* Using x and y */}
-                        {Array.from({ length: 9 })
+                        {Array.from({ length: 23 })
                             .map((_, rowIndex) => rowIndex)
                             .reverse()
                             .map((rowIndex) => (
@@ -267,8 +267,6 @@ const Game: React.FC = () => {
                             display: "flex",
                             flexDirection: "column",
                             justifyContent: "space-between",
-                            alignItems: "flex-end",
-                            flexWrap: "wrap",
                         }}
                     >
                         <TrapBlock

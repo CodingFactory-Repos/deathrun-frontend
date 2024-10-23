@@ -6,6 +6,7 @@ import backgroundH from "../assets/images/background.gif";
 import { Button, Modal, TextField } from "@mui/material";
 import GodSelector from "../components/GodSelector.tsx";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const RedeemCode: React.FC = () => {
     const [inputValue, setInputValue] = useState("");
@@ -24,17 +25,16 @@ const RedeemCode: React.FC = () => {
     const handleClose = () => setOpen(false);
 
     const joinRoom = () => {
-        try {
-            axios
-                .get(`${import.meta.env.VITE_SOCKET_UNITY}room/${inputValue}`)
-                .then((res) => {
-                    console.log(res);
-                    setAvailableGods(res.data.availableGods);
-                    setOpen(true);
-                });
-        } catch (error) {
-            console.error(error);
-        }
+        axios
+            .get(`${import.meta.env.VITE_SOCKET_UNITY}room/${inputValue}`)
+            .then((res) => {
+                console.log(res);
+                setAvailableGods(res.data.availableGods);
+                setOpen(true);
+            })
+            .catch(() => {
+                toast.error("Room not found");
+            });
     };
 
     return (

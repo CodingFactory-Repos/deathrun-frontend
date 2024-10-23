@@ -2,26 +2,10 @@ import React, { useState } from "react";
 import Relentirico from "../assets/images/relentir.ico";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { useDrag, DragPreviewImage } from "react-dnd";
+import { TrapItem, TrapContainer } from "../types/TrapTypes.ts";
 
 const ItemTypes = {
     ICON: "icon",
-};
-
-interface TrapBlock {
-    trapItem: TrapItem[];
-    onSelectTrap: (icon: {
-        id: number;
-        label: string;
-        images: string[];
-        description: string;
-    }) => void;
-}
-
-type TrapItem = {
-    id: number;
-    label: string;
-    images: string[];
-    description: string;
 };
 
 const Icon = ({
@@ -101,7 +85,7 @@ const Icon = ({
     );
 };
 
-const TrapBlock: React.FC<TrapBlock> = ({ trapItem, onSelectTrap }) => {
+const TrapBlock: React.FC<TrapContainer> = ({ trapItem, onSelectTrap }) => {
     return (
         <>
             <div
