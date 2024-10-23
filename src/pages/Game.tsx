@@ -14,6 +14,7 @@ import Fade from "@mui/material/Fade";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
+import BackgroundG from "../assets/images/game_background.gif";
 
 import RockPaperScissors from "../components/RockPaperScissors.tsx";
 
@@ -197,7 +198,12 @@ const Game: React.FC = () => {
 
   return (
     <DndProvider backend={HTML5Backend}>
-      <MainPage>
+      <MainPage
+        componentStyle={{
+          backgroundImage: `url(${BackgroundG})`,
+          backgroundSize: "cover",
+        }}
+      >
         <div
           style={{
             display: "flex",
