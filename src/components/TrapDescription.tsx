@@ -1,15 +1,5 @@
 import React from "react";
-
-type Trap = {
-    id: number;
-    label: string;
-    description: string;
-    images: string[];
-};
-
-type TrapDescriptionProps = {
-    trapItem: Trap;
-};
+import { TrapDescriptionProps } from "../types/TrapTypes.ts";
 
 const TrapDescription: React.FC<TrapDescriptionProps> = ({ trapItem }) => {
     return (

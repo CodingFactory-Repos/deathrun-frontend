@@ -10,15 +10,10 @@ const ItemTypes = {
 
 const Icon = ({
     icon,
-    onSelectTrap,
+    onHoverTrap,
 }: {
     icon: TrapItem;
-    onSelectTrap: (icon: {
-        id: number;
-        label: string;
-        images: string[];
-        description: string;
-    }) => void;
+    onHoverTrap: (icon: TrapItem | null) => void;
 }) => {
     const [{ isDragging }, drag, preview] = useDrag(() => ({
         type: ItemTypes.ICON,
@@ -44,7 +39,8 @@ const Icon = ({
             />
             <div
                 ref={drag}
-                onClick={() => onSelectTrap(icon)} // Appelle onSelectTrap au clic
+                onMouseEnter={() => onHoverTrap(icon)}
+                onMouseLeave={() => onHoverTrap(null)}
                 style={{
                     opacity: isDragging ? 0.5 : 1,
                     fontSize: "2rem",
@@ -85,7 +81,7 @@ const Icon = ({
     );
 };
 
-const TrapBlock: React.FC<TrapContainer> = ({ trapItem, onSelectTrap }) => {
+const TrapBlock: React.FC<TrapContainer> = ({ trapItem, onHoverTrap }) => {
     return (
         <>
             <div
@@ -113,7 +109,7 @@ const TrapBlock: React.FC<TrapContainer> = ({ trapItem, onSelectTrap }) => {
                         <Icon
                             key={icon.id}
                             icon={icon}
-                            onSelectTrap={onSelectTrap}
+                            onHoverTrap={onHoverTrap}
                         />
                     ))}
                 </div>

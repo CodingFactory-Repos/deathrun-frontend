@@ -1,16 +1,15 @@
 export interface TrapContainer {
     trapItem: TrapItem[];
-    onSelectTrap: (icon: {
-        id: number;
-        label: string;
-        images: string[];
-        description: string;
-    }) => void;
+    onHoverTrap: (icon: TrapItem | null) => void;
 }
 
 export type TrapItem = {
     id: number;
     label: string;
     images: string[];
-    description: string;
+    description?: string;
+};
+
+export type TrapDescriptionProps = {
+    trapItem: TrapItem;
 };

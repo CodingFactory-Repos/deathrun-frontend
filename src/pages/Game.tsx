@@ -13,12 +13,13 @@ import CrossBowUp from "../assets/images/crossbow_up.png";
 import toast from "react-hot-toast";
 import { RoomInformations } from "../types/RoomTypes.ts";
 import gameBackground from "../assets/images/game_background.gif";
+import { TrapItem } from "../types/TrapTypes.ts";
 
 const ItemTypes = {
     ICON: "icon",
 };
 
-const iconsData = [
+const iconsData: TrapItem[] = [
     {
         id: 1,
         label: "CrossBow",
@@ -36,7 +37,6 @@ const iconsData = [
         id: 3,
         label: "🌟",
         images: [CrossBowDown, CrossBowLeft, CrossBowUp],
-        description: "La description de l'icone 3, étoile...",
     },
 ];
 
@@ -213,7 +213,7 @@ const Game: React.FC = () => {
         });
     };
 
-    const [selectedTrap, setSelectedTrap] = useState(iconsData[0]);
+    const [hoveredTrap, setHoveredTrap] = useState<TrapItem | null>(null); // Gérer l'icône survolée
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -271,9 +271,12 @@ const Game: React.FC = () => {
                     >
                         <TrapBlock
                             trapItem={iconsData}
-                            onSelectTrap={setSelectedTrap}
+                            onHoverTrap={setHoveredTrap}
                         />
-                        <TrapDescription trapItem={selectedTrap} />
+                        
+                        {hoveredTrap && (
+                            <TrapDescription trapItem={hoveredTrap} />
+                        )}
                     </div>
                 </div>
 
