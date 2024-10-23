@@ -4,11 +4,9 @@ import TextField from '@mui/material/TextField';
 import Backdrop from '@mui/material/Backdrop';
 import Modal from '@mui/material/Modal';
 import Fade from '@mui/material/Fade';
-import Button from '@mui/material/Button';
 import LightningButton from "./LightningButton";
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/system';
 
 const style = {
     position: 'absolute',
@@ -38,7 +36,7 @@ const Chat = ({ socket }) => {
 
     const handleSendMessage = () => {
         if (chatMessage.trim()) {
-            socket.emit("rooms:message", { message: chatMessage });
+            socket.emit("room:message", { message: chatMessage });
             setChatMessage("");
             handleClose();
         }
