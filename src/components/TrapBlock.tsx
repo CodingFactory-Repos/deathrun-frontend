@@ -9,15 +9,18 @@ const ItemTypes = {
 
 interface TrapBlock {
   trapItem: TrapItem[];
+  onSelectTrap: (icon: { id: number; label: string; name: string; description: string }) => void;
 }
 
 type TrapItem = {
   id: number;
   label: string;
   images: string[];
+  name: string;
+  description: string;
 };
 
-const Icon = ({ icon }: { icon: TrapItem }) => {
+const Icon = ({ icon,onSelectTrap }: { icon: TrapItem;  onSelectTrap: (icon: { id: number; label: string; name: string; description: string }) => void}) => {
   const [{ isDragging }, drag, preview] = useDrag(() => ({
     type: ItemTypes.ICON,
     item: { id: icon.id },
@@ -40,6 +43,7 @@ const Icon = ({ icon }: { icon: TrapItem }) => {
       />
       <div
         ref={drag}
+        onClick={() => onSelectTrap(icon)} // Appelle onSelectTrap au clic
         style={{
           opacity: isDragging ? 0.5 : 1,
           fontSize: "2rem",
@@ -80,7 +84,7 @@ const Icon = ({ icon }: { icon: TrapItem }) => {
   );
 };
 
-const TrapBlock: React.FC<TrapBlock> = ({ trapItem }) => {
+const TrapBlock: React.FC<TrapBlock> = ({ trapItem , onSelectTrap}) => {
   return (
     <>
       <div
@@ -105,7 +109,7 @@ const TrapBlock: React.FC<TrapBlock> = ({ trapItem }) => {
 
         <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
           {trapItem.map((icon) => (
-            <Icon key={icon.id} icon={icon} />
+            <Icon key={icon.id} icon={icon} onSelectTrap={onSelectTrap} />
           ))}
         </div>
       </div>
