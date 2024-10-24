@@ -72,6 +72,7 @@ const Cell = ({
     hasPlayer,
     hasProps,
     hasTraps,
+    trapsPlaced,
 }: {
     x: number;
     y: number;
@@ -79,6 +80,7 @@ const Cell = ({
     hasPlayer: boolean;
     hasProps: boolean;
     hasTraps: boolean;
+    trapsPlaced: { x: number; y: number }[];
 }) => {
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.ICON,
@@ -87,6 +89,26 @@ const Cell = ({
             isOver: !!monitor.isOver(),
         }),
     }));
+
+    const trap: { x: number; y: number; trapType?: string } | null =
+        trapsPlaced.find((trap) => trap.x === x && trap.y === y) || null;
+
+    let trapImage: string | null = null;
+
+    if (trap) {
+        // Find trap
+        for (const icon of iconsData) {
+            for (const trapData of icon.trapData) {
+                if (trapData.trapType === trap.trapType) {
+                    trapImage = trapData.image;
+                    break;
+                }
+            }
+            if (trapImage) {
+                break;
+            }
+        }
+    }
 
     return (
         <div
@@ -99,10 +121,10 @@ const Cell = ({
                 backgroundColor: hasProps
                     ? "gray"
                     : hasTraps
-                      ? "darkred"
+                      ? "rgba(255,255,255,0.8)"
                       : isOver
                         ? "lightgreen"
-                        : "white",
+                        : "rgba(255,255,255,0.8)",
                 pointerEvents:
                     hasProps || hasTraps || hasPlayer ? "none" : "auto",
             }}
@@ -115,6 +137,22 @@ const Cell = ({
                         height: "1rem",
                         backgroundColor: "red",
                         borderRadius: "50%",
+                        position: "absolute",
+                        top: "50%",
+                        left: "50%",
+                        transform: "translate(-50%, -50%)",
+                    }}
+                />
+            )}
+
+            {trapImage && trap && (
+                <img
+                    src={trapImage}
+                    alt={trap.trapType}
+                    style={{
+                        width: "80%",
+                        height: "80%",
+                        // objectFit: "cover",
                         position: "absolute",
                         top: "50%",
                         left: "50%",
@@ -157,6 +195,7 @@ const GameRows = ({
                     hasTraps={trapsPlaced.some(
                         (trap) => trap.x === colIndex && trap.y === rowIndex
                     )}
+                    trapsPlaced={trapsPlaced}
                 />
             ))}
         </>
