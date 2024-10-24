@@ -6,8 +6,18 @@ export interface TrapContainer {
 export type TrapItem = {
     id: number;
     label: string;
-    images: string[];
     description?: string;
+    trapData: TrapData[];
+};
+
+type TrapData = {
+    image: string;
+    trapType: string;
+};
+
+export type TrapDrop = {
+    id: number;
+    trapData: { image: string; trapType: string };
 };
 
 export type TrapDescriptionProps = {

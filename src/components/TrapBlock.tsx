@@ -15,19 +15,23 @@ const Icon = ({
     icon: TrapItem;
     onHoverTrap: (icon: TrapItem | null) => void;
 }) => {
-    const [{ isDragging }, drag, preview] = useDrag(() => ({
-        type: ItemTypes.ICON,
-        item: { id: icon.id },
-        collect: (monitor) => ({
-            isDragging: !!monitor.isDragging(),
+    const [currentTrapIndex, setCurrentTrapIndex] = useState(0);
+    const currentTrap = icon.trapData[currentTrapIndex];
+
+    const [{ isDragging }, drag, preview] = useDrag(
+        () => ({
+            type: ItemTypes.ICON,
+            item: { id: icon.id, trapData: currentTrap },
+            collect: (monitor) => ({
+                isDragging: !!monitor.isDragging(),
+            }),
         }),
-    }));
+        [currentTrap]
+    );
 
-    const [currentImageIndex, setCurrentImageIndex] = useState(0);
-
-    const handleImageChange = () => {
-        setCurrentImageIndex(
-            (prevIndex) => (prevIndex + 1) % icon.images.length
+    const handleTrapChange = () => {
+        setCurrentTrapIndex(
+            (prevIndex) => (prevIndex + 1) % icon.trapData.length
         );
     };
 
@@ -35,7 +39,7 @@ const Icon = ({
         <>
             <DragPreviewImage
                 connect={preview}
-                src={icon.images[currentImageIndex] || Relentirico}
+                src={currentTrap?.image || Relentirico}
             />
             <div
                 ref={drag}
@@ -55,9 +59,9 @@ const Icon = ({
                     minWidth: 100,
                 }}
             >
-                {icon.images.length > 0 ? (
+                {icon.trapData.length > 0 ? (
                     <img
-                        src={icon.images[currentImageIndex]}
+                        src={currentTrap?.image}
                         alt={icon.label}
                         style={{ height: 40 }}
                     />
@@ -65,9 +69,9 @@ const Icon = ({
                     icon.label
                 )}
 
-                {icon.images.length > 1 && (
+                {icon.trapData.length > 1 && (
                     <AutorenewIcon
-                        onClick={handleImageChange}
+                        onClick={handleTrapChange}
                         style={{
                             width: "20px",
                             height: "20px",

@@ -13,7 +13,9 @@ import CrossBowUp from "../assets/images/crossbow_up.png";
 import toast from "react-hot-toast";
 import { RoomInformations } from "../types/RoomTypes.ts";
 import gameBackground from "../assets/images/game_background.gif";
-import { TrapItem } from "../types/TrapTypes.ts";
+import { TrapDrop, TrapItem } from "../types/TrapTypes.ts";
+import RockPaperScissors from "../components/RockPaperScissors.tsx";
+import { Button } from "@mui/material";
 
 const ItemTypes = {
     ICON: "icon",
@@ -23,20 +25,43 @@ const iconsData: TrapItem[] = [
     {
         id: 1,
         label: "CrossBow",
-        images: [CrossBowLeft],
         description:
             "La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus v La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus ",
+        trapData: [
+            {
+                image: CrossBowLeft,
+                trapType: "crossbow_Left_prefab",
+            },
+        ],
     },
     {
         id: 2,
         label: "🔥",
-        images: [CrossBowUp],
         description: "La description de l'icone 2, feu des enfers...",
+        trapData: [
+            {
+                image: CrossBowUp,
+                trapType: "crossbow_up_prefab",
+            },
+        ],
     },
     {
         id: 3,
         label: "🌟",
-        images: [CrossBowDown, CrossBowLeft, CrossBowUp],
+        trapData: [
+            {
+                image: CrossBowLeft,
+                trapType: "crossbow_side_prefab",
+            },
+            {
+                image: CrossBowDown,
+                trapType: "crossbow_down_prefab",
+            },
+            {
+                image: CrossBowUp,
+                trapType: "crossbow_up_prefab",
+            },
+        ],
     },
 ];
 
@@ -50,14 +75,14 @@ const Cell = ({
 }: {
     x: number;
     y: number;
-    onDrop: (x: number, y: number, itemId: number) => void;
+    onDrop: (x: number, y: number, item: TrapDrop) => void;
     hasPlayer: boolean;
     hasProps: boolean;
     hasTraps: boolean;
 }) => {
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.ICON,
-        drop: (item: { id: number }) => onDrop(x, y, item.id),
+        drop: (item: TrapDrop) => onDrop(x, y, item),
         collect: (monitor) => ({
             isOver: !!monitor.isOver(),
         }),
@@ -110,7 +135,7 @@ const GameRows = ({
 }: {
     rowIndex: number;
     playerPosition: { x: number; y: number };
-    onDrop: (x: number, y: number, itemId: number) => void;
+    onDrop: (x: number, y: number, item: TrapDrop) => void;
     propsPlaced: { x: number; y: number }[];
     trapsPlaced: { x: number; y: number }[];
 }) => {
@@ -204,16 +229,22 @@ const Game: React.FC = () => {
         }
     }, []);
 
-    const handleDrop = (x: number, y: number, itemId: number) => {
-        console.log(`Item ${itemId} dropped on cell (x: ${x}, y: ${y})`);
+    const handleDrop = (x: number, y: number, item: TrapDrop) => {
+        console.log(`Item ${item.id} dropped on cell (x: ${x}, y: ${y})`);
+        console.log("Item", item);
         socket.emit("traps:request", {
             x: x,
             y: y,
-            trapType: "crossbow_down_prefab",
+            trapType: item.trapData.trapType,
         });
     };
 
-    const [hoveredTrap, setHoveredTrap] = useState<TrapItem | null>(null); // Gérer l'icône survolée
+    const [hoveredTrap, setHoveredTrap] = useState<TrapItem | null>(null);
+
+    const [openRps, setOpenRps] = useState(false);
+
+    const handleOpenRps = () => setOpenRps(true);
+    const handleCloseRps = () => setOpenRps(false);
 
     return (
         <DndProvider backend={HTML5Backend}>
@@ -273,7 +304,7 @@ const Game: React.FC = () => {
                             trapItem={iconsData}
                             onHoverTrap={setHoveredTrap}
                         />
-                        
+
                         {hoveredTrap && (
                             <TrapDescription trapItem={hoveredTrap} />
                         )}
@@ -281,6 +312,13 @@ const Game: React.FC = () => {
                 </div>
 
                 <Chat socket={socket} />
+                <Button variant="contained" onClick={() => handleOpenRps()}>
+                    Rock Paper Scissors
+                </Button>
+                <RockPaperScissors
+                    openRps={openRps}
+                    handleCloseRps={handleCloseRps}
+                />
             </MainPage>
         </DndProvider>
     );

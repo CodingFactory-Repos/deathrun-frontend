@@ -33,9 +33,9 @@ const TrapDescription: React.FC<TrapDescriptionProps> = ({ trapItem }) => {
                         marginRight: "10px",
                     }}
                 >
-                    {trapItem.images.length > 0 ? (
+                    {trapItem.trapData.length > 0 ? (
                         <img
-                            src={trapItem.images[0]}
+                            src={trapItem.trapData[0].image}
                             alt={trapItem.label}
                             style={{ height: "60px" }}
                         />
