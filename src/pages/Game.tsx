@@ -93,22 +93,18 @@ const Cell = ({
     const trap: { x: number; y: number; trapType?: string } | null =
         trapsPlaced.find((trap) => trap.x === x && trap.y === y) || null;
 
-    let trapImage: string | null = null;
-
-    if (trap) {
-        // Find trap
+    // Find the image of the trap
+    const findTrapImage = (trapType: string): string | null => {
         for (const icon of iconsData) {
-            for (const trapData of icon.trapData) {
-                if (trapData.trapType === trap.trapType) {
-                    trapImage = trapData.image;
-                    break;
-                }
-            }
-            if (trapImage) {
-                break;
-            }
+            const trapData = icon.trapData.find(
+                (data) => data.trapType === trapType
+            );
+            if (trapData) return trapData.image;
         }
-    }
+        return null;
+    };
+
+    const trapImage = trap?.trapType ? findTrapImage(trap.trapType) : null;
 
     return (
         <div
