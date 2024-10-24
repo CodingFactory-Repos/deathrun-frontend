@@ -1,6 +1,6 @@
-import React from 'react';
-import '../styles/LightningButton.css';
+import "../styles/LightningButton.css";
 
+// @ts-ignore
 const LightningButton = ({ text, onClick }) => {
     return (
         <button className="lightning-button" onClick={onClick}>
