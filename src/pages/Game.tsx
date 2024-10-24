@@ -10,6 +10,7 @@ import Chat from "../components/ChatModal.tsx";
 import CrossBowDown from "../assets/images/crossbow_down.png";
 import CrossBowLeft from "../assets/images/crossbow_left.png";
 import CrossBowUp from "../assets/images/crossbow_up.png";
+import BearTrap from "../assets/images/bear_trap.png";
 import toast from "react-hot-toast";
 import { RoomInformations } from "../types/RoomTypes.ts";
 import gameBackground from "../assets/images/game_background.gif";
@@ -25,8 +26,7 @@ const iconsData: TrapItem[] = [
     {
         id: 1,
         label: "CrossBow",
-        description:
-            "La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus v La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus, La description de l'icone 1, foudre de zeus La description de l'icone 1, foudre de zeus ",
+        description: "",
         trapData: [
             {
                 image: CrossBowLeft,
@@ -36,18 +36,18 @@ const iconsData: TrapItem[] = [
     },
     {
         id: 2,
-        label: "🔥",
-        description: "La description de l'icone 2, feu des enfers...",
+        label: "Bear Trap",
+        description: "",
         trapData: [
             {
-                image: CrossBowUp,
-                trapType: "crossbow_up_prefab",
+                image: BearTrap,
+                trapType: "bear_trap",
             },
         ],
     },
     {
         id: 3,
-        label: "🌟",
+        label: "CrossBow",
         trapData: [
             {
                 image: CrossBowLeft,
