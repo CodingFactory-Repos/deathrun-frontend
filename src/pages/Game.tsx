@@ -14,6 +14,8 @@ import toast from "react-hot-toast";
 import { RoomInformations } from "../types/RoomTypes.ts";
 import gameBackground from "../assets/images/game_background.gif";
 import { TrapDrop, TrapItem } from "../types/TrapTypes.ts";
+import RockPaperScissors from "../components/RockPaperScissors.tsx";
+import { Button } from "@mui/material";
 
 const ItemTypes = {
     ICON: "icon",
@@ -239,6 +241,11 @@ const Game: React.FC = () => {
 
     const [hoveredTrap, setHoveredTrap] = useState<TrapItem | null>(null);
 
+    const [openRps, setOpenRps] = useState(false);
+
+    const handleOpenRps = () => setOpenRps(true);
+    const handleCloseRps = () => setOpenRps(false);
+
     return (
         <DndProvider backend={HTML5Backend}>
             <MainPage
@@ -305,6 +312,13 @@ const Game: React.FC = () => {
                 </div>
 
                 <Chat socket={socket} />
+                <Button variant="contained" onClick={() => handleOpenRps()}>
+                    Rock Paper Scissors
+                </Button>
+                <RockPaperScissors
+                    openRps={openRps}
+                    handleCloseRps={handleCloseRps}
+                />
             </MainPage>
         </DndProvider>
     );
