@@ -240,7 +240,7 @@ const Game: React.FC = () => {
                     roomInformations = data;
                     console.log("Joined room", roomInformations);
 
-                    setProps(roomInformations.props);
+                    setProps(roomInformations.props || []);
                     setTrapsList(roomInformations.traps || []);
 
                     // Après avoir rejoint la room plus besoin de l'écouter.
