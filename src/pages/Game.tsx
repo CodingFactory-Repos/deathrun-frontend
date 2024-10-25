@@ -17,6 +17,7 @@ import gameBackground from "../assets/images/game_background.gif";
 import { TrapDrop, TrapItem } from "../types/TrapTypes.ts";
 import RockPaperScissors from "../components/RockPaperScissors.tsx";
 import { Button } from "@mui/material";
+import StartButton from "../components/StartButton.tsx";
 
 const ItemTypes = {
     ICON: "icon",
@@ -117,10 +118,10 @@ const Cell = ({
                 backgroundColor: hasProps
                     ? "gray"
                     : hasTraps
-                      ? "rgba(255,255,255,0.8)"
-                      : isOver
-                        ? "lightgreen"
-                        : "rgba(255,255,255,0.8)",
+                        ? "rgba(255,255,255,0.8)"
+                        : isOver
+                            ? "lightgreen"
+                            : "rgba(255,255,255,0.8)",
                 pointerEvents:
                     hasProps || hasTraps || hasPlayer ? "none" : "auto",
             }}
@@ -229,8 +230,8 @@ const Game: React.FC = () => {
                 data:
                     | RoomInformations
                     | {
-                          error: string;
-                      }
+                        error: string;
+                    }
             ) => {
                 if ("error" in data) {
                     toast.error(data.error);
@@ -354,6 +355,7 @@ const Game: React.FC = () => {
                     openRps={openRps}
                     handleCloseRps={handleCloseRps}
                 />
+                <StartButton socket={socket} />
             </MainPage>
         </DndProvider>
     );
