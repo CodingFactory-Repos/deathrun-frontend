@@ -397,7 +397,7 @@ const Game: React.FC = () => {
                             </div>
                         </div>
 
-                        <div style={{ width: "100%", backgroundColor: "red" }}>
+                        <div style={{ width: "100%" }}>
                             <FrameDisplay socket={socket} />
                         </div>
                     </div>
