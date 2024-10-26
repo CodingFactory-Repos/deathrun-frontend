@@ -349,10 +349,13 @@ const Game: React.FC = () => {
                             ))}
                     </div>
                     {roomInformations !== null ? (
-                        <GameInfo
-                            roomInformations={roomInformations}
-                            godId={godId}
-                        />
+                        <div>
+                            <GameInfo
+                                roomInformations={roomInformations}
+                                godId={godId}
+                            />
+                            <FrameDisplay socket={socket} />
+                        </div>
                     ) : (
                         <div>loading...</div>
                     )}
@@ -385,7 +388,6 @@ const Game: React.FC = () => {
                 />
                 <StartButton socket={socket} />
 
-                <FrameDisplay socket={socket} />
             </MainPage>
         </DndProvider>
     );
