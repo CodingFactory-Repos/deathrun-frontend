@@ -255,8 +255,8 @@ const Game: React.FC = () => {
                     setRoomInformations(data);
                     console.log("Joined room", roomInformations);
 
-                    setProps(roomInformations?.props || []);
-                    setTrapsList(roomInformations?.traps || []);
+                    setProps(data?.props || []);
+                    setTrapsList(data?.traps || []);
 
                     // Après avoir rejoint la room plus besoin de l'écouter.
                     socket.on("rooms:events", (data: RoomInformations) => {
