@@ -381,6 +381,20 @@ const Game: React.FC = () => {
                             {hoveredTrap && (
                                 <TrapDescription trapItem={hoveredTrap} />
                             )}
+                            <div>
+                                <Chat socket={socket} />
+                                <Button
+                                    variant="contained"
+                                    onClick={() => handleOpenRps()}
+                                >
+                                    Rock Paper Scissors
+                                </Button>
+                                <RockPaperScissors
+                                    openRps={openRps}
+                                    handleCloseRps={handleCloseRps}
+                                />
+                                <StartButton socket={socket} />
+                            </div>
                         </div>
 
                         <div style={{ width: "100%", backgroundColor: "red" }}>
@@ -388,16 +402,6 @@ const Game: React.FC = () => {
                         </div>
                     </div>
                 </div>
-
-                <Chat socket={socket} />
-                <Button variant="contained" onClick={() => handleOpenRps()}>
-                    Rock Paper Scissors
-                </Button>
-                <RockPaperScissors
-                    openRps={openRps}
-                    handleCloseRps={handleCloseRps}
-                />
-                <StartButton socket={socket} />
             </MainPage>
         </DndProvider>
     );
