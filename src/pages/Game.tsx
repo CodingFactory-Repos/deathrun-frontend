@@ -8,7 +8,8 @@ import TrapBlock from "../components/TrapBlock.tsx";
 import TrapDescription from "../components/TrapDescription.tsx";
 import Chat from "../components/ChatModal.tsx";
 import CrossBowDown from "../assets/images/crossbow_down.png";
-import CrossBowLeft from "../assets/images/crossbow_left.png";
+import CrossBowLeft from "../assets/images/crossbow_side_left.png";
+import CrossBowRight from "../assets/images/crossbow_side_right.png";
 import CrossBowUp from "../assets/images/crossbow_up.png";
 import BearTrap from "../assets/images/bear_trap.png";
 import toast from "react-hot-toast";
@@ -18,6 +19,7 @@ import { TrapDrop, TrapItem } from "../types/TrapTypes.ts";
 import RockPaperScissors from "../components/RockPaperScissors.tsx";
 import { Button } from "@mui/material";
 import StartButton from "../components/StartButton.tsx";
+import GameInfo from "../components/GameInfo.tsx";
 
 const ItemTypes = {
     ICON: "icon",
@@ -28,10 +30,11 @@ const iconsData: TrapItem[] = [
         id: 1,
         label: "CrossBow",
         description: "",
+        cost: 2,
         trapData: [
             {
                 image: CrossBowLeft,
-                trapType: "crossbow_Left_prefab",
+                trapType: "crossbow_side_left_prefab",
             },
         ],
     },
@@ -39,6 +42,7 @@ const iconsData: TrapItem[] = [
         id: 2,
         label: "Bear Trap",
         description: "",
+        cost: 1,
         trapData: [
             {
                 image: BearTrap,
@@ -49,18 +53,23 @@ const iconsData: TrapItem[] = [
     {
         id: 3,
         label: "CrossBow",
+        cost: 3,
         trapData: [
             {
                 image: CrossBowLeft,
-                trapType: "crossbow_side_prefab",
-            },
-            {
-                image: CrossBowDown,
-                trapType: "crossbow_down_prefab",
+                trapType: "crossbow_side_left_prefab",
             },
             {
                 image: CrossBowUp,
                 trapType: "crossbow_up_prefab",
+            },
+            {
+                image: CrossBowRight,
+                trapType: "crossbow_side_right_prefab",
+            },
+            {
+                image: CrossBowDown,
+                trapType: "crossbow_down_prefab",
             },
         ],
     },
@@ -74,6 +83,7 @@ const Cell = ({
     hasProps,
     hasTraps,
     trapsPlaced,
+    showPlayer,
 }: {
     x: number;
     y: number;
@@ -82,6 +92,7 @@ const Cell = ({
     hasProps: boolean;
     hasTraps: boolean;
     trapsPlaced: { x: number; y: number }[];
+    showPlayer: boolean;
 }) => {
     const [{ isOver }, drop] = useDrop(() => ({
         accept: ItemTypes.ICON,
@@ -127,7 +138,7 @@ const Cell = ({
             }}
         >
             {/* If the player is in this case place a red dot */}
-            {hasPlayer && (
+            {hasPlayer && showPlayer && (
                 <div
                     style={{
                         width: "1rem",
@@ -167,12 +178,14 @@ const GameRows = ({
     onDrop,
     propsPlaced,
     trapsPlaced,
+    showPlayer,
 }: {
     rowIndex: number;
     playerPosition: { x: number; y: number };
     onDrop: (x: number, y: number, item: TrapDrop) => void;
     propsPlaced: { x: number; y: number }[];
     trapsPlaced: { x: number; y: number }[];
+    showPlayer: boolean;
 }) => {
     return (
         <>
@@ -186,13 +199,14 @@ const GameRows = ({
                         colIndex === playerPosition.x &&
                         rowIndex === playerPosition.y
                     }
-                    hasProps={propsPlaced.some(
+                    hasProps={propsPlaced?.some(
                         (prop) => prop.x === colIndex && prop.y === rowIndex
                     )}
-                    hasTraps={trapsPlaced.some(
+                    hasTraps={trapsPlaced?.some(
                         (trap) => trap.x === colIndex && trap.y === rowIndex
                     )}
                     trapsPlaced={trapsPlaced}
+                    showPlayer={showPlayer}
                 />
             ))}
         </>
@@ -200,28 +214,29 @@ const GameRows = ({
 };
 
 const Game: React.FC = () => {
-    const { isConnected, position, socket, traps } = usePlayerPosition();
+    const { isConnected, position, socket, traps, showPlayer } =
+        usePlayerPosition();
     const location = useLocation();
     const navigate = useNavigate();
     const searchParams = new URLSearchParams(location.search);
     const room = searchParams.get("player");
     const [props, setProps] = useState([{ x: 0, y: 0 }]);
     const [trapsList, setTrapsList] = useState([{ x: 0, y: 0 }]);
+    const [roomInformations, setRoomInformations] =
+        useState<RoomInformations | null>(null);
 
     const { godId } = location.state ? location.state : { godId: 0 };
 
     console.log("Position", position);
     console.log("isConnected", isConnected);
     console.log("Props", props);
-    console.log("godId", godId);
+    // console.log("godId", godId);
 
     useEffect(() => {
         if (traps) {
             setTrapsList(traps);
         }
     }, [traps]);
-
-    let roomInformations: RoomInformations;
 
     useEffect(() => {
         socket.on(
@@ -237,15 +252,15 @@ const Game: React.FC = () => {
                     toast.error(data.error);
                     navigate("/");
                 } else {
-                    roomInformations = data;
+                    setRoomInformations(data);
                     console.log("Joined room", roomInformations);
 
-                    setProps(roomInformations.props || []);
-                    setTrapsList(roomInformations.traps || []);
+                    setProps(roomInformations?.props || []);
+                    setTrapsList(roomInformations?.traps || []);
 
                     // Après avoir rejoint la room plus besoin de l'écouter.
                     socket.on("rooms:events", (data: RoomInformations) => {
-                        roomInformations = data;
+                        setRoomInformations(data);
                         console.log("Room events", roomInformations);
                     });
                 }
@@ -264,6 +279,9 @@ const Game: React.FC = () => {
             navigate("/");
         }
     }, []);
+
+    console.log("Room informations1", roomInformations);
+    // console.log("godId", godId);
 
     const handleDrop = (x: number, y: number, item: TrapDrop) => {
         console.log(`Item ${item.id} dropped on cell (x: ${x}, y: ${y})`);
@@ -325,9 +343,18 @@ const Game: React.FC = () => {
                                     propsPlaced={props}
                                     trapsPlaced={trapsList}
                                     onDrop={handleDrop}
+                                    showPlayer={showPlayer}
                                 />
                             ))}
                     </div>
+                    {roomInformations !== null ? (
+                        <GameInfo
+                            roomInformations={roomInformations}
+                            godId={godId}
+                        />
+                    ) : (
+                        <div>loading...</div>
+                    )}
 
                     <div
                         style={{

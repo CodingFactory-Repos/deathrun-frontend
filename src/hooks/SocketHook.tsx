@@ -6,6 +6,7 @@ function usePlayerPosition() {
     const [isConnected, setIsConnected] = useState(socket.connected);
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [traps, setTraps] = useState([{ x: 0, y: 0 }]);
+    const [showPlayer, setShowPlayer] = useState(false);
 
     useEffect(() => {
         function onConnect() {
@@ -36,13 +37,29 @@ function usePlayerPosition() {
             setTraps(data);
         }
 
+        function onDisableTracking() {
+            console.log(
+                "Rooms corridor-----------------------------------------------------------------------------"
+            );
+            setShowPlayer(false);
+        }
+
+        function onEnableTracking() {
+            console.log(
+                "Enable tracking-----------------------------------------------------------------------------"
+            );
+            setShowPlayer(true);
+        }
+
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
         socket.on("players:move", onPositionChange);
         socket.on("traps:list", onTrapsList);
+        socket.on("disable:tracking", onDisableTracking);
+        socket.on("enable:tracking", onEnableTracking);
     }, []);
 
-    return { isConnected, position, socket, traps };
+    return { isConnected, position, socket, traps, showPlayer };
 }
 
 export default usePlayerPosition;
