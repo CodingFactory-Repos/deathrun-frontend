@@ -104,7 +104,7 @@ const Cell = ({
     }));
 
     const trap: { x: number; y: number; trapType?: string } | null =
-        trapsPlaced.find((trap) => trap.x === x && trap.y === y) || null;
+        trapsPlaced?.find((trap) => trap.x === x && trap.y === y) || null;
 
     // Find the image of the trap
     const findTrapImage = (trapType: string): string | null => {
@@ -130,10 +130,10 @@ const Cell = ({
                 backgroundColor: hasProps
                     ? "gray"
                     : hasTraps
-                        ? "rgba(255,255,255,0.8)"
-                        : isOver
-                            ? "lightgreen"
-                            : "rgba(255,255,255,0.8)",
+                      ? "rgba(255,255,255,0.8)"
+                      : isOver
+                        ? "lightgreen"
+                        : "rgba(255,255,255,0.8)",
                 pointerEvents:
                     hasProps || hasTraps || hasPlayer ? "none" : "auto",
             }}
@@ -246,8 +246,8 @@ const Game: React.FC = () => {
                 data:
                     | RoomInformations
                     | {
-                        error: string;
-                    }
+                          error: string;
+                      }
             ) => {
                 if ("error" in data) {
                     toast.error(data.error);
@@ -262,6 +262,8 @@ const Game: React.FC = () => {
                     // Après avoir rejoint la room plus besoin de l'écouter.
                     socket.on("rooms:events", (data: RoomInformations) => {
                         setRoomInformations(data);
+                        setTrapsList(data?.traps);
+                        setProps(data?.props);
                         console.log("Room events", roomInformations);
                     });
                 }
@@ -322,7 +324,7 @@ const Game: React.FC = () => {
                 <div
                     style={{
                         display: "flex",
-                        justifyContent: "space-between",
+                        // justifyContent: "space-between",
                     }}
                 >
                     <div
@@ -348,33 +350,42 @@ const Game: React.FC = () => {
                                 />
                             ))}
                     </div>
-                    {roomInformations !== null ? (
-                        <div>
-                            <GameInfo
-                                roomInformations={roomInformations}
-                                godId={godId}
-                            />
-                            <FrameDisplay socket={socket} />
-                        </div>
-                    ) : (
-                        <div>loading...</div>
-                    )}
 
                     <div
                         style={{
-                            display: "flex",
-                            flexDirection: "column",
-                            justifyContent: "space-between",
+                            width: "100%",
+                            marginLeft: 12,
+                            position: "relative",
                         }}
                     >
-                        <TrapBlock
-                            trapItem={iconsData}
-                            onHoverTrap={setHoveredTrap}
-                        />
+                        <div
+                            style={{
+                                display: "flex",
+                                gap: 12,
+                                marginBottom: 12,
+                            }}
+                        >
+                            <TrapBlock
+                                trapItem={iconsData}
+                                onHoverTrap={setHoveredTrap}
+                            />
+                            {roomInformations !== null ? (
+                                <GameInfo
+                                    roomInformations={roomInformations}
+                                    godId={godId}
+                                />
+                            ) : (
+                                <div>loading...</div>
+                            )}
 
-                        {hoveredTrap && (
-                            <TrapDescription trapItem={hoveredTrap} />
-                        )}
+                            {hoveredTrap && (
+                                <TrapDescription trapItem={hoveredTrap} />
+                            )}
+                        </div>
+
+                        <div style={{ width: "100%", backgroundColor: "red" }}>
+                            <FrameDisplay socket={socket} />
+                        </div>
                     </div>
                 </div>
 
@@ -387,7 +398,6 @@ const Game: React.FC = () => {
                     handleCloseRps={handleCloseRps}
                 />
                 <StartButton socket={socket} />
-
             </MainPage>
         </DndProvider>
     );
