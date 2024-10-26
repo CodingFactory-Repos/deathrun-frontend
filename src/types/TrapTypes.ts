@@ -7,6 +7,7 @@ export type TrapItem = {
     id: number;
     label: string;
     description?: string;
+    cost: number;
     trapData: TrapData[];
 };
 

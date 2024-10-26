@@ -18,6 +18,7 @@ import gameBackground from "../assets/images/game_background.gif";
 import { TrapDrop, TrapItem } from "../types/TrapTypes.ts";
 import RockPaperScissors from "../components/RockPaperScissors.tsx";
 import { Button } from "@mui/material";
+import GameInfo from "../components/GameInfo.tsx";
 
 const ItemTypes = {
     ICON: "icon",
@@ -28,10 +29,11 @@ const iconsData: TrapItem[] = [
         id: 1,
         label: "CrossBow",
         description: "",
+        cost: 2,
         trapData: [
             {
                 image: CrossBowLeft,
-                trapType: "crossbow_Left_prefab",
+                trapType: "crossbow_side_left_prefab",
             },
         ],
     },
@@ -39,6 +41,7 @@ const iconsData: TrapItem[] = [
         id: 2,
         label: "Bear Trap",
         description: "",
+        cost: 1,
         trapData: [
             {
                 image: BearTrap,
@@ -49,6 +52,7 @@ const iconsData: TrapItem[] = [
     {
         id: 3,
         label: "CrossBow",
+        cost: 3,
         trapData: [
             {
                 image: CrossBowLeft,
@@ -217,12 +221,12 @@ const Game: React.FC = () => {
     const room = searchParams.get("player");
     const [props, setProps] = useState([{ x: 0, y: 0 }]);
     const [trapsList, setTrapsList] = useState([{ x: 0, y: 0 }]);
-    // const [roomInformations, setRoomInformations] =
-    //     useState<RoomInformations>();
+    const [roomInformations, setRoomInformations] =
+        useState<RoomInformations | null>(null);
 
     const { godId } = location.state ? location.state : { godId: 0 };
 
-    // console.log("Position", position);
+    console.log("Position", position);
     console.log("isConnected", isConnected);
     console.log("Props", props);
     // console.log("godId", godId);
@@ -232,8 +236,6 @@ const Game: React.FC = () => {
             setTrapsList(traps);
         }
     }, [traps]);
-
-    let roomInformations: RoomInformations;
 
     useEffect(() => {
         socket.on(
@@ -249,15 +251,15 @@ const Game: React.FC = () => {
                     toast.error(data.error);
                     navigate("/");
                 } else {
-                    roomInformations = data;
+                    setRoomInformations(data);
                     console.log("Joined room", roomInformations);
 
-                    setProps(roomInformations.props);
-                    setTrapsList(roomInformations.traps || []);
+                    setProps(data.props);
+                    setTrapsList(data.traps || []);
 
                     // Après avoir rejoint la room plus besoin de l'écouter.
                     socket.on("rooms:events", (data: RoomInformations) => {
-                        roomInformations = data;
+                        setRoomInformations(data);
                         console.log("Room events", roomInformations);
                     });
                 }
@@ -277,7 +279,7 @@ const Game: React.FC = () => {
         }
     }, []);
 
-    // console.log("Room informations", roomInformations);
+    console.log("Room informations1", roomInformations);
     // console.log("godId", godId);
 
     const handleDrop = (x: number, y: number, item: TrapDrop) => {
@@ -344,6 +346,14 @@ const Game: React.FC = () => {
                                 />
                             ))}
                     </div>
+                    {roomInformations !== null ? (
+                        <GameInfo
+                            roomInformations={roomInformations}
+                            godId={godId}
+                        />
+                    ) : (
+                        <div>loading...</div>
+                    )}
 
                     <div
                         style={{
