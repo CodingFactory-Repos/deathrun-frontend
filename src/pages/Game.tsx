@@ -20,6 +20,7 @@ import RockPaperScissors from "../components/RockPaperScissors.tsx";
 import { Button } from "@mui/material";
 import StartButton from "../components/StartButton.tsx";
 import GameInfo from "../components/GameInfo.tsx";
+import FrameDisplay from "../components/FrameDisplay.tsx";
 
 const ItemTypes = {
     ICON: "icon",
@@ -383,6 +384,8 @@ const Game: React.FC = () => {
                     handleCloseRps={handleCloseRps}
                 />
                 <StartButton socket={socket} />
+
+                <FrameDisplay socket={socket} />
             </MainPage>
         </DndProvider>
     );
