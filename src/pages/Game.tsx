@@ -20,6 +20,7 @@ import RockPaperScissors from "../components/RockPaperScissors.tsx";
 import { Button } from "@mui/material";
 import StartButton from "../components/StartButton.tsx";
 import GameInfo from "../components/GameInfo.tsx";
+import FrameDisplay from "../components/FrameDisplay.tsx";
 
 const ItemTypes = {
     ICON: "icon",
@@ -348,10 +349,13 @@ const Game: React.FC = () => {
                             ))}
                     </div>
                     {roomInformations !== null ? (
-                        <GameInfo
-                            roomInformations={roomInformations}
-                            godId={godId}
-                        />
+                        <div>
+                            <GameInfo
+                                roomInformations={roomInformations}
+                                godId={godId}
+                            />
+                            <FrameDisplay socket={socket} />
+                        </div>
                     ) : (
                         <div>loading...</div>
                     )}
@@ -383,6 +387,7 @@ const Game: React.FC = () => {
                     handleCloseRps={handleCloseRps}
                 />
                 <StartButton socket={socket} />
+
             </MainPage>
         </DndProvider>
     );
