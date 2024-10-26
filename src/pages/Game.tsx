@@ -18,7 +18,9 @@ import gameBackground from "../assets/images/game_background.gif";
 import { TrapDrop, TrapItem } from "../types/TrapTypes.ts";
 import RockPaperScissors from "../components/RockPaperScissors.tsx";
 import { Button } from "@mui/material";
+import StartButton from "../components/StartButton.tsx";
 import GameInfo from "../components/GameInfo.tsx";
+import FrameDisplay from "../components/FrameDisplay.tsx";
 
 const ItemTypes = {
     ICON: "icon",
@@ -45,7 +47,7 @@ const iconsData: TrapItem[] = [
         trapData: [
             {
                 image: BearTrap,
-                trapType: "bear_trap",
+                trapType: "bear_trap_prefab",
             },
         ],
     },
@@ -128,10 +130,10 @@ const Cell = ({
                 backgroundColor: hasProps
                     ? "gray"
                     : hasTraps
-                      ? "rgba(255,255,255,0.8)"
-                      : isOver
-                        ? "lightgreen"
-                        : "rgba(255,255,255,0.8)",
+                        ? "rgba(255,255,255,0.8)"
+                        : isOver
+                            ? "lightgreen"
+                            : "rgba(255,255,255,0.8)",
                 pointerEvents:
                     hasProps || hasTraps || hasPlayer ? "none" : "auto",
             }}
@@ -244,8 +246,8 @@ const Game: React.FC = () => {
                 data:
                     | RoomInformations
                     | {
-                          error: string;
-                      }
+                        error: string;
+                    }
             ) => {
                 if ("error" in data) {
                     toast.error(data.error);
@@ -254,8 +256,8 @@ const Game: React.FC = () => {
                     setRoomInformations(data);
                     console.log("Joined room", roomInformations);
 
-                    setProps(data.props);
-                    setTrapsList(data.traps || []);
+                    setProps(data?.props || []);
+                    setTrapsList(data?.traps || []);
 
                     // Après avoir rejoint la room plus besoin de l'écouter.
                     socket.on("rooms:events", (data: RoomInformations) => {
@@ -347,10 +349,13 @@ const Game: React.FC = () => {
                             ))}
                     </div>
                     {roomInformations !== null ? (
-                        <GameInfo
-                            roomInformations={roomInformations}
-                            godId={godId}
-                        />
+                        <div>
+                            <GameInfo
+                                roomInformations={roomInformations}
+                                godId={godId}
+                            />
+                            <FrameDisplay socket={socket} />
+                        </div>
                     ) : (
                         <div>loading...</div>
                     )}
@@ -381,6 +386,8 @@ const Game: React.FC = () => {
                     openRps={openRps}
                     handleCloseRps={handleCloseRps}
                 />
+                <StartButton socket={socket} />
+
             </MainPage>
         </DndProvider>
     );
