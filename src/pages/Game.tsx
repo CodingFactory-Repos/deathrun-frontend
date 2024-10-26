@@ -46,7 +46,7 @@ const iconsData: TrapItem[] = [
         trapData: [
             {
                 image: BearTrap,
-                trapType: "bear_trap",
+                trapType: "bear_trap_prefab",
             },
         ],
     },
