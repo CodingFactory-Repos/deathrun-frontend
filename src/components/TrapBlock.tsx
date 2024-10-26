@@ -57,8 +57,19 @@ const Icon = ({
                     padding: "10px",
                     marginBottom: "10px",
                     minWidth: 100,
+                    position: "relative",
                 }}
             >
+                <span
+                    style={{
+                        fontSize: 18,
+                        position: "absolute",
+                        top: 33,
+                        left: 5,
+                    }}
+                >
+                    {icon.cost}
+                </span>
                 {icon.trapData.length > 0 ? (
                     <img
                         src={currentTrap?.image}
