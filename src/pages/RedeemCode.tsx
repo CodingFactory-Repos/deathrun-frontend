@@ -71,12 +71,12 @@ const RedeemCode: React.FC = () => {
                     }}
                     onMouseEnter={(e) => {
                         if (isCodeValid) {
-                            e.currentTarget.style.backgroundColor = "#6a9cbf"; // Lightened shade on hover
+                            e.currentTarget.style.backgroundColor = "#6a9cbf";
                         }
                     }}
                     onMouseLeave={(e) => {
                         if (isCodeValid) {
-                            e.currentTarget.style.backgroundColor = "#5078A0"; // Original color
+                            e.currentTarget.style.backgroundColor = "#5078A0";
                         }
                     }}
                 >

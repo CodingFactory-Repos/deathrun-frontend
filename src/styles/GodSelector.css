@@ -1,0 +1,90 @@
+.god-selector-container {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 900px;
+    background-color: #1a1a2e;
+    border: 2px solid #000;
+    box-shadow: 24px;
+    padding: 16px;
+    gap: 12px;
+    overflow-y: auto;
+    max-height: 80vh;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    color: #5078a0;
+}
+
+.god-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+    overflow-y: auto;
+    max-height: 60vh;
+}
+
+.god-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    padding: 8px;
+    border: 3px solid transparent; /* Keep a consistent border */
+    transition: border-color 0.3s;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    height: 400px;
+}
+
+.god-item.selected {
+    border-color: #5078a0;
+}
+
+.god-item.disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+}
+
+.god-image {
+    height: 300px;
+    width: 300px;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.god-name {
+    color: white;
+    font-weight: bold;
+}
+
+.tooltip {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 10px;
+    border-radius: 5px;
+    z-index: 10;
+    width: 95%;
+    overflow-y: auto;
+    text-align: center;
+}
+
+.tooltip-image {
+    height: 200px;
+    width: 200px;
+    object-fit: cover;
+    margin-bottom: 5px;
+}
