@@ -4,10 +4,11 @@ export type GodData = {
   image: string;
   description: string;
   disabled: boolean;
+  catchphrase: string;
 }[];
 
 export type GodSelectorProps = {
-  availableGods: number[]; // Typage de availableGods (ajuste selon ton besoin)
+  availableGods: string[];
   roomCode: string;
 };
 
