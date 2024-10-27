@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import Relentirico from "../assets/images/relentir.ico";
 import AutorenewIcon from "@mui/icons-material/Autorenew";
 import { useDrag, DragPreviewImage } from "react-dnd";
 import { TrapItem, TrapContainer } from "../types/TrapTypes.ts";
@@ -37,10 +36,7 @@ const Icon = ({
 
     return (
         <>
-            <DragPreviewImage
-                connect={preview}
-                src={currentTrap?.image || Relentirico}
-            />
+            <DragPreviewImage connect={preview} src={currentTrap?.image} />
             <div
                 ref={drag}
                 onMouseEnter={() => onHoverTrap(icon)}
@@ -57,8 +53,19 @@ const Icon = ({
                     padding: "10px",
                     marginBottom: "10px",
                     minWidth: 100,
+                    position: "relative",
                 }}
             >
+                <span
+                    style={{
+                        fontSize: 18,
+                        position: "absolute",
+                        top: 33,
+                        left: 5,
+                    }}
+                >
+                    {icon.cost}
+                </span>
                 {icon.trapData.length > 0 ? (
                     <img
                         src={currentTrap?.image}
@@ -87,15 +94,13 @@ const Icon = ({
 
 const TrapBlock: React.FC<TrapContainer> = ({ trapItem, onHoverTrap }) => {
     return (
-        <>
+        <div>
             <div
                 style={{
                     width: "350px",
-                    border: "1px solid rgba(0, 0, 0, 0.2)",
                     padding: "10px",
                     borderRadius: "5px",
-                    backgroundColor: "white",
-                    boxShadow: "0 0 10px rgba(0, 0, 0, 0.2)",
+                    backgroundColor: "rgba(255,255,255,0.8)",
                 }}
             >
                 <h2
@@ -118,7 +123,7 @@ const TrapBlock: React.FC<TrapContainer> = ({ trapItem, onHoverTrap }) => {
                     ))}
                 </div>
             </div>
-        </>
+        </div>
     );
 };
 

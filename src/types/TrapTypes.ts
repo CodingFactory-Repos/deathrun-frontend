@@ -1,3 +1,5 @@
+import { GameInfoHover } from "./RoomTypes.ts";
+
 export interface TrapContainer {
     trapItem: TrapItem[];
     onHoverTrap: (icon: TrapItem | null) => void;
@@ -7,6 +9,7 @@ export type TrapItem = {
     id: number;
     label: string;
     description?: string;
+    cost: number;
     trapData: TrapData[];
 };
 
@@ -21,5 +24,5 @@ export type TrapDrop = {
 };
 
 export type TrapDescriptionProps = {
-    trapItem: TrapItem;
+    trapItem: TrapItem | GameInfoHover;
 };
