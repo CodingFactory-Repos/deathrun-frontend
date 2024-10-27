@@ -384,19 +384,29 @@ const Game: React.FC = () => {
                             {hoveredTrap && (
                                 <TrapDescription trapItem={hoveredTrap} />
                             )}
-                            <div>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    justifyContent: "space-around",
+                                    width: "100%",
+                                }}
+                            >
                                 <Chat socket={socket} />
-                                <RockPaperScissors
-                                    openRps={openRps}
-                                    handleCloseRps={handleCloseRps}
-                                />
-                                <StartButton socket={socket} />
+                                {roomInformations?.started === false && (
+                                    <StartButton socket={socket} />
+                                )}
                             </div>
                         </div>
 
                         <div style={{ width: "100%" }}>
                             <FrameDisplay socket={socket} />
                         </div>
+                        <RockPaperScissors
+                            openRps={openRps}
+                            handleCloseRps={handleCloseRps}
+                        />
                     </div>
                 </div>
             </MainPage>
