@@ -15,7 +15,6 @@ const CodeInput: React.FC<CodeInputProps> = ({ code, onCodeChange }) => {
             updatedCode[index] = value;
             onCodeChange(updatedCode);
 
-            // Focus next input
             if (value && index < 3) {
                 inputRefs.current[index + 1]?.focus();
             }
@@ -52,21 +51,21 @@ const CodeInput: React.FC<CodeInputProps> = ({ code, onCodeChange }) => {
                             color: "white",
                             fontSize: "2em",
                             fontFamily: "fantasy",
-                            backgroundColor: "rgba(0, 0, 0, 0.3)", // Dark background for contrast
+                            backgroundColor: "rgba(0, 0, 0, 0.3)",
                             borderRadius: "5px",
                         },
                     }}
                     sx={{
                         maxWidth: "80px",
                         "& .MuiOutlinedInput-root": {
-                            "&:hover fieldset": { borderColor: "white" }, // Gold border on hover
-                            "&.Mui-focused fieldset": { borderColor: "white" }, // Gold border when focused
+                            "&:hover fieldset": { borderColor: "white" },
+                            "&.Mui-focused fieldset": { borderColor: "white" },
                         },
                         "& .MuiInputLabel-root": {
                             color: "white",
                         },
                         "& .MuiInputLabel-root.Mui-focused": {
-                            color: "gold", // Gold label when focused
+                            color: "gold",
                         },
                     }}
                 />

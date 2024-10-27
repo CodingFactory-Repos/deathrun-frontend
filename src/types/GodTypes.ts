@@ -8,7 +8,7 @@ export type GodData = {
 }[];
 
 export type GodSelectorProps = {
-  availableGods: string[]; // Typage de availableGods (ajuste selon ton besoin)
+  availableGods: string[];
   roomCode: string;
 };
 
