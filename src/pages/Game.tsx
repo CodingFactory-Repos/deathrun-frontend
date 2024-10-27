@@ -13,11 +13,11 @@ import CrossBowRight from "../assets/images/crossbow_side_right.png";
 import CrossBowUp from "../assets/images/crossbow_up.png";
 import BearTrap from "../assets/images/bear_trap.png";
 import toast from "react-hot-toast";
-import { RoomInformations } from "../types/RoomTypes.ts";
+import { GameInfoHover, RoomInformations } from "../types/RoomTypes.ts";
 import gameBackground from "../assets/images/game_background.gif";
 import { TrapDrop, TrapItem } from "../types/TrapTypes.ts";
 import RockPaperScissors from "../components/RockPaperScissors.tsx";
-import { Button } from "@mui/material";
+// import { Button } from "@mui/material";
 import StartButton from "../components/StartButton.tsx";
 import GameInfo from "../components/GameInfo.tsx";
 import FrameDisplay from "../components/FrameDisplay.tsx";
@@ -31,7 +31,7 @@ const iconsData: TrapItem[] = [
         id: 1,
         label: "CrossBow",
         description: "",
-        cost: 2,
+        cost: 5,
         trapData: [
             {
                 image: CrossBowLeft,
@@ -54,7 +54,7 @@ const iconsData: TrapItem[] = [
     {
         id: 3,
         label: "CrossBow",
-        cost: 3,
+        cost: 5,
         trapData: [
             {
                 image: CrossBowLeft,
@@ -296,11 +296,13 @@ const Game: React.FC = () => {
         });
     };
 
-    const [hoveredTrap, setHoveredTrap] = useState<TrapItem | null>(null);
+    const [hoveredTrap, setHoveredTrap] = useState<
+        TrapItem | GameInfoHover | null
+    >(null);
 
     const [openRps, setOpenRps] = useState(false);
 
-    const handleOpenRps = () => setOpenRps(true);
+    // const handleOpenRps = () => setOpenRps(true);
     const handleCloseRps = () => setOpenRps(false);
 
     return (
@@ -373,6 +375,7 @@ const Game: React.FC = () => {
                                 <GameInfo
                                     roomInformations={roomInformations}
                                     godId={godId}
+                                    onHoverTrap={setHoveredTrap}
                                 />
                             ) : (
                                 <div>loading...</div>
@@ -381,25 +384,29 @@ const Game: React.FC = () => {
                             {hoveredTrap && (
                                 <TrapDescription trapItem={hoveredTrap} />
                             )}
-                            <div>
+                            <div
+                                style={{
+                                    display: "flex",
+                                    flexDirection: "column",
+                                    alignItems: "center",
+                                    justifyContent: "space-around",
+                                    width: "100%",
+                                }}
+                            >
                                 <Chat socket={socket} />
-                                <Button
-                                    variant="contained"
-                                    onClick={() => handleOpenRps()}
-                                >
-                                    Rock Paper Scissors
-                                </Button>
-                                <RockPaperScissors
-                                    openRps={openRps}
-                                    handleCloseRps={handleCloseRps}
-                                />
-                                <StartButton socket={socket} />
+                                {roomInformations?.started === false && (
+                                    <StartButton socket={socket} />
+                                )}
                             </div>
                         </div>
 
                         <div style={{ width: "100%" }}>
                             <FrameDisplay socket={socket} />
                         </div>
+                        <RockPaperScissors
+                            openRps={openRps}
+                            handleCloseRps={handleCloseRps}
+                        />
                     </div>
                 </div>
             </MainPage>

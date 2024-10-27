@@ -39,11 +39,18 @@ const TrapDescription: React.FC<TrapDescriptionProps> = ({ trapItem }) => {
                             marginRight: "10px",
                         }}
                     >
-                        {trapItem.trapData.length > 0 ? (
+                        {"trapData" in trapItem &&
+                        trapItem.trapData.length > 0 ? (
                             <img
                                 src={trapItem.trapData[0].image}
                                 alt={trapItem.label}
-                                style={{ height: "60px" }}
+                                style={{ height: 40 }}
+                            />
+                        ) : "image" in trapItem ? (
+                            <img
+                                src={trapItem.image}
+                                alt={trapItem.label}
+                                style={{ height: 40 }}
                             />
                         ) : (
                             trapItem.label
@@ -51,13 +58,12 @@ const TrapDescription: React.FC<TrapDescriptionProps> = ({ trapItem }) => {
                     </div>
                     <div
                         style={{
-                            fontWeight: "bold" as const,
+                            fontWeight: "bold",
                             fontSize: "1.5rem",
                         }}
                     >
                         {trapItem.label}
                     </div>
-                    {/* Icône et nom sur la même ligne */}
                 </div>
                 <p
                     style={{

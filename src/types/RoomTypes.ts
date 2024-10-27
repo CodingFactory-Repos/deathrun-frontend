@@ -20,4 +20,11 @@ export interface RoomInformations {
 export type RoomInformationsProps = {
     roomInformations: RoomInformations;
     godId: number;
+    onHoverTrap: (icon: GameInfoHover | null) => void;
+};
+
+export type GameInfoHover = {
+    description: string;
+    label: string;
+    image: string;
 };

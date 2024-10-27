@@ -1,12 +1,16 @@
 import { useState } from "react";
-import Box from "@mui/material/Box";
-import TextField from "@mui/material/TextField";
-import Backdrop from "@mui/material/Backdrop";
-import Modal from "@mui/material/Modal";
-import Fade from "@mui/material/Fade";
+import {
+    Box,
+    TextField,
+    Backdrop,
+    Modal,
+    Fade,
+    Typography,
+    Stack,
+    Button,
+} from "@mui/material";
+import ChatBubbleIcon from "@mui/icons-material/ChatBubble";
 import LightningButton from "./LightningButton";
-import Typography from "@mui/material/Typography";
-import Stack from "@mui/material/Stack";
 
 const style = {
     position: "absolute",
@@ -46,7 +50,14 @@ const Chat = ({ socket }) => {
 
     return (
         <div>
-            <LightningButton text="Envoyer un message" onClick={handleOpen} />
+            <Button
+                variant="contained"
+                startIcon={<ChatBubbleIcon />}
+                onClick={() => handleOpen()}
+                size="large"
+            >
+                Send a message
+            </Button>
             <Modal
                 aria-labelledby="transition-modal-title"
                 aria-describedby="transition-modal-description"
