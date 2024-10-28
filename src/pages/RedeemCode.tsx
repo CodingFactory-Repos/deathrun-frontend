@@ -1,34 +1,31 @@
-import React, { useState } from "react";
+import React, { useState, useMemo } from "react";
 import "../styles/redeemCode.css";
-import { useMemo } from "react";
 import MainPage from "../components/MainPage.tsx";
 import backgroundH from "../assets/images/background.gif";
-import { Button, Modal, TextField } from "@mui/material";
+import { Button, Modal } from "@mui/material";
 import GodSelector from "../components/GodSelector.tsx";
 import axios from "axios";
 import toast from "react-hot-toast";
+import CodeInput from "../components/CodeInput";
 
 const RedeemCode: React.FC = () => {
-    const [inputValue, setInputValue] = useState("");
-    const [availableGods, setAvailableGods] = useState([]);
+    const [code, setCode] = useState(["", "", "", ""]);
+    const [availableGods, setAvailableGods] = useState<string[]>([]);
+    const [open, setOpen] = useState(false);
 
-    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setInputValue(e.target.value);
+    const handleCodeChange = (updatedCode: string[]) => {
+        setCode(updatedCode);
     };
 
-    const isValueValid = useMemo(() => {
-        return inputValue.length > 0;
-    }, [inputValue]);
+    const isCodeValid = useMemo(() => code.every((digit) => digit.length > 0), [code]);
 
-    const [open, setOpen] = React.useState(false);
-    // const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
 
     const joinRoom = () => {
+        const roomCode = code.join("");
         axios
-            .get(`${import.meta.env.VITE_SOCKET_UNITY}room/${inputValue}`)
+            .get(`${import.meta.env.VITE_SOCKET_UNITY}room/${roomCode}`)
             .then((res) => {
-                console.log(res);
                 setAvailableGods(res.data.availableGods);
                 setOpen(true);
             })
@@ -47,49 +44,43 @@ const RedeemCode: React.FC = () => {
                 backgroundSize: "cover",
             }}
         >
-            <div className="form-container">
-                <h1 className="form-title">LoopTrap</h1>
-                <TextField
-                    id="outlined-basic"
-                    label="Room Code"
-                    variant="outlined"
-                    value={inputValue}
-                    onChange={handleInputChange}
-                    style={{ marginBottom: 20 }}
-                    sx={{
-                        "& .MuiOutlinedInput-root": {
-                            "& fieldset": {
-                                borderColor: "white",
-                            },
-                            "&:hover fieldset": {
-                                borderColor: "lightblue",
-                            },
-                            "&.Mui-focused fieldset": {
-                                borderColor: "lightblue",
-                            },
-                        },
-                        "& .MuiInputLabel-root": {
-                            color: "white",
-                        },
-                        "& .MuiInputLabel-root.Mui-focused": {
-                            color: "lightblue",
-                        },
-                        input: { color: "white" },
-                    }}
-                />
+            <div className="overlay" />
+            <h1 className="title">Godbless</h1>
+            <div className="form-container"
+                onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
+                onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+            >
+                <h2 className="form-subtitle">Enter the room code:</h2>
+                <CodeInput code={code} onCodeChange={handleCodeChange} />
                 <Button
                     variant="contained"
-                    // component={Link}
-                    // to={`/game?player=${inputValue}`}
-                    // onClick={handleOpen}
-                    onClick={() => joinRoom()}
-                    disabled={!isValueValid}
+                    onClick={joinRoom}
+                    disabled={!isCodeValid}
+                    className={`submit-button ${isCodeValid ? '' : 'disabled'}`}
                     style={{
                         color: "white",
-                        textDecoration: "none",
+                        backgroundColor: isCodeValid ? "#5078A0" : "gray",
+                        border: "2px solid #5078A0",
+                        borderRadius: "10px",
+                        padding: "15px 30px",
+                        fontSize: "1.8rem",
+                        fontFamily: "fantasy",
+                        textShadow: "1px 1px 2px rgba(0, 0, 0, 0.5)",
+                        cursor: isCodeValid ? "pointer" : "not-allowed",
+                        transition: "background-color 0.3s ease",
+                    }}
+                    onMouseEnter={(e) => {
+                        if (isCodeValid) {
+                            e.currentTarget.style.backgroundColor = "#6a9cbf";
+                        }
+                    }}
+                    onMouseLeave={(e) => {
+                        if (isCodeValid) {
+                            e.currentTarget.style.backgroundColor = "#5078A0";
+                        }
                     }}
                 >
-                    Choose your GOD
+                    PICK YOUR GOD
                 </Button>
                 <Modal
                     open={open}
@@ -99,11 +90,11 @@ const RedeemCode: React.FC = () => {
                 >
                     <GodSelector
                         availableGods={availableGods}
-                        roomCode={inputValue}
+                        roomCode={code.join("")}
                     />
                 </Modal>
             </div>
-        </MainPage>
+        </MainPage >
     );
 };
 

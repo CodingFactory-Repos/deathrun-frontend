@@ -7,6 +7,8 @@ function usePlayerPosition() {
     const [position, setPosition] = useState({ x: 0, y: 0 });
     const [traps, setTraps] = useState([{ x: 0, y: 0 }]);
     const [showPlayer, setShowPlayer] = useState(false);
+    const [cameraFrame, setCameraFrame] = useState("");
+
 
     useEffect(() => {
         function onConnect() {
@@ -51,15 +53,28 @@ function usePlayerPosition() {
             setShowPlayer(true);
         }
 
+        function onCameraFrame(data: string) {
+            setCameraFrame(data);
+        }
+        
+    
+
+     
+
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
         socket.on("players:move", onPositionChange);
         socket.on("traps:list", onTrapsList);
         socket.on("disable:tracking", onDisableTracking);
         socket.on("enable:tracking", onEnableTracking);
+        socket.on("camera:sending", (data: string) => {
+            onCameraFrame(data);
+        });
+        socket.on("disable:tracking", onDisableTracking);
+        socket.on("enable:tracking", onEnableTracking);
     }, []);
 
-    return { isConnected, position, socket, traps, showPlayer };
+    return { isConnected, position, socket, traps, showPlayer, cameraFrame };
 }
 
 export default usePlayerPosition;
