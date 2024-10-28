@@ -14,6 +14,7 @@ function usePlayerPosition() {
     } | null>(null);
     const [rpsStart, setRpsStart] = useState(false);
 
+
     useEffect(() => {
         function onConnect() {
             // console.log("Connected");
@@ -77,6 +78,8 @@ function usePlayerPosition() {
         socket.on("camera:sending", (data: string) => {
             onCameraFrame(data);
         });
+        socket.on("disable:tracking", onDisableTracking);
+        socket.on("enable:tracking", onEnableTracking);
     }, []);
 
     return {
