@@ -217,7 +217,7 @@ const GameRows = ({
 };
 
 const Game: React.FC = () => {
-    const { isConnected, position, socket, traps, showPlayer } =
+    const { isConnected, position, socket, traps, showPlayer, rpsStart } =
         usePlayerPosition();
     const location = useLocation();
     const navigate = useNavigate();
@@ -240,6 +240,12 @@ const Game: React.FC = () => {
             setTrapsList(traps);
         }
     }, [traps]);
+
+    useEffect(() => {
+        if (rpsStart) {
+            setOpenRps(true);
+        }
+    }, [rpsStart]);
 
     useEffect(() => {
         socket.on(
