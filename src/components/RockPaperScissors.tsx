@@ -9,17 +9,6 @@ const RockPaperScissors: React.FC<{
     openRps: boolean;
     handleCloseRps: () => void;
 }> = ({ openRps, handleCloseRps }) => {
-    const overlayStyle = {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
-        backdropFilter: "blur(5px)",
-        zIndex: 1,
-    };
-
     const modalStyle = {
         position: "absolute",
         top: "50%",
@@ -76,34 +65,64 @@ const RockPaperScissors: React.FC<{
 
     return (
         <>
-            {openRps && <div style={overlayStyle} />}
+            {openRps && (
+                <div
+                    style={{
+                        position: "fixed",
+                        top: 0,
+                        left: 0,
+                        width: "100%",
+                        height: "100%",
+                        backgroundColor: "rgba(0, 0, 0, 0.7)",
+                        backdropFilter: "blur(5px)",
+                        zIndex: 1,
+                    }}
+                />
+            )}
             <Modal
                 open={openRps}
-                onClose={() => { }}
+                onClose={() => {}}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={modalStyle}>
-                    <h2 style={{ color: "#ffffff", textAlign: "center", fontSize: "2rem", fontFamily: "fantasy", marginBottom: "20px" }}>
+                    <h2
+                        style={{
+                            color: "#ffffff",
+                            textAlign: "center",
+                            fontSize: "2rem",
+                            fontFamily: "fantasy",
+                            marginBottom: "20px",
+                        }}
+                    >
                         Choose Your Move
                     </h2>
-                    <div style={{
-                        position: "absolute",
-                        width: "100%",
-                        top: "-80%",
-                        left: "50%",
-                        transform: "translateX(-50%)",
-                        color: "#1E90FF",
-                        fontFamily: "fantasy",
-                        fontSize: "4rem",
-                        fontWeight: "bold",
-                        textAlign: "center",
-                        textShadow: "2px 2px 0 rgba(0, 0, 0, 0.7)",
-                        animation: "pulse 1.5s infinite" // Apply the pulse animation
-                    }}>
-                        A mortal strikes the divine! Let them pay the price of their audacity!
+                    <div
+                        style={{
+                            position: "absolute",
+                            width: "100%",
+                            top: "-80%",
+                            left: "50%",
+                            transform: "translateX(-50%)",
+                            color: "#1E90FF",
+                            fontFamily: "fantasy",
+                            fontSize: "4rem",
+                            fontWeight: "bold",
+                            textAlign: "center",
+                            textShadow: "2px 2px 0 rgba(0, 0, 0, 0.7)",
+                            animation: "pulse 1.5s infinite", // Apply the pulse animation
+                        }}
+                    >
+                        A mortal strikes the divine! Let them pay the price of
+                        their audacity!
                     </div>
-                    <div style={{ display: "flex", justifyContent: "space-around", gap: 40 }}>
+                    <div
+                        style={{
+                            display: "flex",
+                            justifyContent: "space-around",
+                            gap: 40,
+                        }}
+                    >
                         {RockPaperScissorsData.map((dataRps) => (
                             <div
                                 key={dataRps.id}
@@ -111,10 +130,17 @@ const RockPaperScissors: React.FC<{
                                 style={{
                                     width: "30%",
                                     cursor: "pointer",
-                                    border: selectedId === dataRps.id ? "3px solid #ffffff" : "3px solid transparent",
+                                    border:
+                                        selectedId === dataRps.id
+                                            ? "3px solid #ffffff"
+                                            : "3px solid transparent",
                                     borderRadius: "15px",
-                                    transition: "border 0.2s ease, transform 0.2s ease",
-                                    backgroundColor: selectedId === dataRps.id ? "#444" : "transparent",
+                                    transition:
+                                        "border 0.2s ease, transform 0.2s ease",
+                                    backgroundColor:
+                                        selectedId === dataRps.id
+                                            ? "#444"
+                                            : "transparent",
                                     padding: "20px",
                                     textAlign: "center",
                                     boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
@@ -130,13 +156,22 @@ const RockPaperScissors: React.FC<{
                                         transition: "transform 0.2s ease",
                                     }}
                                     onMouseEnter={(e) => {
-                                        e.currentTarget.style.transform = "scale(1.1)";
+                                        e.currentTarget.style.transform =
+                                            "scale(1.1)";
                                     }}
                                     onMouseLeave={(e) => {
-                                        e.currentTarget.style.transform = "scale(1)";
+                                        e.currentTarget.style.transform =
+                                            "scale(1)";
                                     }}
                                 />
-                                <p style={{ color: "#ffffff", marginTop: "10px", fontSize: "2.5rem", fontFamily: "fantasy" }}>
+                                <p
+                                    style={{
+                                        color: "#ffffff",
+                                        marginTop: "10px",
+                                        fontSize: "2.5rem",
+                                        fontFamily: "fantasy",
+                                    }}
+                                >
                                     {dataRps.name}
                                 </p>
                             </div>
