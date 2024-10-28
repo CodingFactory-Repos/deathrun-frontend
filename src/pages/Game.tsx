@@ -27,7 +27,8 @@ import BackgroundEnvy from "../assets/images/gods/EnvyBackground.png";
 import BackgroundVanity from "../assets/images/gods/VanityBackground.png";
 import BackgroundGreed from "../assets/images/gods/GreedBackground.png";
 import BackgroundSloth from "../assets/images/gods/SlothBackground.png";
-const backgrounds = {
+
+const backgrounds: Record<number, string> = {
     1: BackgroundGreed,
     2: BackgroundChaos,
     3: BackgroundGluttony,
@@ -325,10 +326,12 @@ const Game: React.FC = () => {
         <DndProvider backend={HTML5Backend}>
             <MainPage
                 componentStyle={{
-                    backgroundImage: `url(${backgrounds[godId] || BackgroundDeath})`,
+                    backgroundImage: `url(${
+                        backgrounds[godId] || BackgroundDeath
+                    })`,
                     backgroundSize: "cover",
                 }}
-                >
+            >
                 <div
                     style={{
                         display: "flex",
