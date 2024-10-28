@@ -30,9 +30,6 @@ const GameInfo: React.FC<RoomInformationsProps> = ({
     godId,
     onHoverTrap,
 }) => {
-    console.log("Room informations-------", roomInformations);
-    console.log("God id", godId);
-
     const myGod = roomInformations?.gods?.find((god) => god.god === godId);
 
     const infoItems = [
