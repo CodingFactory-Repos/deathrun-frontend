@@ -21,7 +21,7 @@ const CodeInput: React.FC<CodeInputProps> = ({ code, onCodeChange }) => {
         }
     };
 
-    const handleKeyDown = (index: number, event: React.KeyboardEvent<HTMLInputElement>) => {
+    const handleKeyDown = (index: number, event: React.KeyboardEvent) => {
         if (event.key === "Backspace" && !code[index] && index > 0) {
             inputRefs.current[index - 1]?.focus();
         }
@@ -35,7 +35,14 @@ const CodeInput: React.FC<CodeInputProps> = ({ code, onCodeChange }) => {
     };
 
     return (
-        <div style={{ display: "flex", gap: "15px", marginBottom: "40px", justifyContent: "center" }}>
+        <div
+            style={{
+                display: "flex",
+                gap: "15px",
+                marginBottom: "40px",
+                justifyContent: "center",
+            }}
+        >
             {code.map((digit, index) => (
                 <TextField
                     key={index}
