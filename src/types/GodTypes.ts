@@ -1,16 +1,17 @@
 export type GodData = {
-  id: number;
-  godName: string;
-  image: string;
-  description: string;
-  disabled: boolean;
+    id: number;
+    godName: string;
+    image: string;
+    description: string;
+    disabled: boolean;
+    catchphrase: string;
 }[];
 
 export type GodSelectorProps = {
-  availableGods: number[]; // Typage de availableGods (ajuste selon ton besoin)
-  roomCode: string;
+    availableGods: number[];
+    roomCode: string;
 };
 
 export type RoomCode = {
-  code: string;
+    code: string;
 };
