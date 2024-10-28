@@ -10,14 +10,17 @@ import CodeInput from "../components/CodeInput";
 
 const RedeemCode: React.FC = () => {
     const [code, setCode] = useState(["", "", "", ""]);
-    const [availableGods, setAvailableGods] = useState<string[]>([]);
+    const [availableGods, setAvailableGods] = useState<number[]>([]);
     const [open, setOpen] = useState(false);
 
     const handleCodeChange = (updatedCode: string[]) => {
         setCode(updatedCode);
     };
 
-    const isCodeValid = useMemo(() => code.every((digit) => digit.length > 0), [code]);
+    const isCodeValid = useMemo(
+        () => code.every((digit) => digit.length > 0),
+        [code]
+    );
 
     const handleClose = () => setOpen(false);
 
@@ -46,9 +49,14 @@ const RedeemCode: React.FC = () => {
         >
             <div className="overlay" />
             <h1 className="title">Godbless</h1>
-            <div className="form-container"
-                onMouseEnter={(e) => e.currentTarget.style.transform = "scale(1.05)"}
-                onMouseLeave={(e) => e.currentTarget.style.transform = "scale(1)"}
+            <div
+                className="form-container"
+                onMouseEnter={(e) =>
+                    (e.currentTarget.style.transform = "scale(1.05)")
+                }
+                onMouseLeave={(e) =>
+                    (e.currentTarget.style.transform = "scale(1)")
+                }
             >
                 <h2 className="form-subtitle">Enter the room code:</h2>
                 <CodeInput code={code} onCodeChange={handleCodeChange} />
@@ -56,7 +64,7 @@ const RedeemCode: React.FC = () => {
                     variant="contained"
                     onClick={joinRoom}
                     disabled={!isCodeValid}
-                    className={`submit-button ${isCodeValid ? '' : 'disabled'}`}
+                    className={`submit-button ${isCodeValid ? "" : "disabled"}`}
                     style={{
                         color: "white",
                         backgroundColor: isCodeValid ? "#5078A0" : "gray",
@@ -94,7 +102,7 @@ const RedeemCode: React.FC = () => {
                     />
                 </Modal>
             </div>
-        </MainPage >
+        </MainPage>
     );
 };
 
