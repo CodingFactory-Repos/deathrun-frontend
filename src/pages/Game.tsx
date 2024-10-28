@@ -399,7 +399,13 @@ const Game: React.FC = () => {
                             >
                                 <Chat socket={socket} />
                                 {roomInformations?.started === false && (
-                                    <StartButton socket={socket} />
+                                    <StartButton
+                                        socket={socket}
+                                        roomInformations={roomInformations}
+                                        setRoomInformations={
+                                            setRoomInformations
+                                        }
+                                    />
                                 )}
                             </div>
                         </div>
