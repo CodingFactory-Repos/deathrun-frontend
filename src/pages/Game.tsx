@@ -75,7 +75,7 @@ const iconsData: TrapItem[] = [
                 trapType: "spike_prefab",
             },
         ],
-    }
+    },
 ];
 
 const Cell = ({
@@ -132,10 +132,10 @@ const Cell = ({
                 backgroundColor: hasProps
                     ? "gray"
                     : hasTraps
-                        ? "rgba(255,255,255,0.8)"
-                        : isOver
-                            ? "lightgreen"
-                            : "rgba(255,255,255,0.8)",
+                      ? "rgba(255,255,255,0.8)"
+                      : isOver
+                        ? "lightgreen"
+                        : "rgba(255,255,255,0.8)",
                 pointerEvents:
                     hasProps || hasTraps || hasPlayer ? "none" : "auto",
             }}
@@ -217,7 +217,7 @@ const GameRows = ({
 };
 
 const Game: React.FC = () => {
-    const { isConnected, position, socket, traps, showPlayer, rpsStart } =
+    const { position, socket, traps, showPlayer, rpsStart } =
         usePlayerPosition();
     const location = useLocation();
     const navigate = useNavigate();
@@ -230,9 +230,9 @@ const Game: React.FC = () => {
 
     const { godId } = location.state ? location.state : { godId: 0 };
 
-    console.log("Position", position);
-    console.log("isConnected", isConnected);
-    console.log("Props", props);
+    // console.log("Position", position);
+    // console.log("isConnected", isConnected);
+    // console.log("Props", props);
     // console.log("godId", godId);
 
     useEffect(() => {
@@ -254,15 +254,15 @@ const Game: React.FC = () => {
                 data:
                     | RoomInformations
                     | {
-                        error: string;
-                    }
+                          error: string;
+                      }
             ) => {
                 if ("error" in data) {
                     toast.error(data.error);
                     navigate("/");
                 } else {
                     setRoomInformations(data);
-                    console.log("Joined room", roomInformations);
+                    // console.log("Joined room", roomInformations);
 
                     setProps(data?.props || []);
                     setTrapsList(data?.traps || []);
@@ -272,7 +272,6 @@ const Game: React.FC = () => {
                         setRoomInformations(data);
                         setTrapsList(data?.traps);
                         setProps(data?.props);
-                        console.log("Room events", roomInformations);
                     });
                 }
 
@@ -291,12 +290,9 @@ const Game: React.FC = () => {
         }
     }, []);
 
-    console.log("Room informations1", roomInformations);
-    // console.log("godId", godId);
-
     const handleDrop = (x: number, y: number, item: TrapDrop) => {
-        console.log(`Item ${item.id} dropped on cell (x: ${x}, y: ${y})`);
-        console.log("Item", item);
+        // console.log(`Item ${item.id} dropped on cell (x: ${x}, y: ${y})`);
+        // console.log("Item", item);
         socket.emit("traps:request", {
             x: x,
             y: y,

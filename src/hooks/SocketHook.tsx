@@ -8,12 +8,15 @@ function usePlayerPosition() {
     const [traps, setTraps] = useState([{ x: 0, y: 0 }]);
     const [showPlayer, setShowPlayer] = useState(false);
     const [cameraFrame, setCameraFrame] = useState("");
-    const [rpsResult, setRpsResult] = useState<{ result: string; move: string } | null>(null);
+    const [rpsResult, setRpsResult] = useState<{
+        result: string;
+        move: string;
+    } | null>(null);
     const [rpsStart, setRpsStart] = useState(false);
 
     useEffect(() => {
         function onConnect() {
-            console.log("Connected");
+            // console.log("Connected");
             setIsConnected(true);
 
             // socket.emit("traps:request", {
@@ -26,42 +29,36 @@ function usePlayerPosition() {
         }
 
         function onDisconnect() {
-            console.log("Disconnected");
+            // console.log("Disconnected");
             setIsConnected(false);
         }
 
         function onPositionChange(data: { x: number; y: number }) {
-            console.log("Position change", data);
+            // console.log("Position change", data);
             setPosition({ x: Math.floor(data.x), y: Math.floor(data.y) });
         }
 
         function onTrapsList(data: { x: number; y: number }[]) {
-            console.log("Traps list", data);
+            // console.log("Traps list", data);
             setTraps(data);
         }
 
         function onRpsResult(data: { result: string; move: string }) {
-            console.log("RPS result", data);
+            // console.log("RPS result", data);
             setRpsResult(data);
             setRpsStart(false);
         }
 
         function onRpsStart() {
-            console.log("RPS start");
+            // console.log("RPS start");
             setRpsStart(true);
         }
 
         function onDisableTracking() {
-            console.log(
-                "Rooms corridor-----------------------------------------------------------------------------"
-            );
             setShowPlayer(false);
         }
 
         function onEnableTracking() {
-            console.log(
-                "Enable tracking-----------------------------------------------------------------------------"
-            );
             setShowPlayer(true);
         }
 
@@ -82,7 +79,16 @@ function usePlayerPosition() {
         });
     }, []);
 
-    return { isConnected, position, socket, traps, rpsResult, rpsStart, showPlayer, cameraFrame };
+    return {
+        isConnected,
+        position,
+        socket,
+        traps,
+        rpsResult,
+        rpsStart,
+        showPlayer,
+        cameraFrame,
+    };
 }
 
 export default usePlayerPosition;
