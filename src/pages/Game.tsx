@@ -15,7 +15,7 @@ import BearTrap from "../assets/images/bear_trap.png";
 import SpikeTrap from "../assets/images/spike_trap.gif";
 import toast from "react-hot-toast";
 import { GameInfoHover, RoomInformations } from "../types/RoomTypes.ts";
-import gameBackground from "../assets/images/game_background.gif";
+//import gameBackground from "../assets/images/game_background.gif";
 import { TrapDrop, TrapItem } from "../types/TrapTypes.ts";
 import RockPaperScissors from "../components/RockPaperScissors.tsx";
 // import { Button } from "@mui/material";
