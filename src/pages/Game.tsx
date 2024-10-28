@@ -14,10 +14,26 @@ import CrossBowUp from "../assets/images/crossbow_up.png";
 import BearTrap from "../assets/images/bear_trap.png";
 import toast from "react-hot-toast";
 import { RoomInformations } from "../types/RoomTypes.ts";
-import gameBackground from "../assets/images/game_background.gif";
 import { TrapDrop, TrapItem } from "../types/TrapTypes.ts";
 import RockPaperScissors from "../components/RockPaperScissors.tsx";
 import { Button } from "@mui/material";
+import BackgroundDeath from "../assets/images/gods/DeathBackground.gif";
+import BackgroundChaos from "../assets/images/gods/ChaosBackground.jpg";
+//import BackgroundGluttony from "../assets/images/gods/GluttonyBackground.png";
+import BackgroundGluttony from "../assets/images/gods/GluttonyBackground.gif";
+import BackgroundEnvy from "../assets/images/gods/EnvyBackground.png";
+import BackgroundVanity from "../assets/images/gods/VanityBackground.png";
+import BackgroundGreed from "../assets/images/gods/GreedBackground.png";
+import BackgroundSloth from "../assets/images/gods/SlothBackground.png";
+const backgrounds = {
+    1: BackgroundGreed,
+    2: BackgroundChaos,
+    3: BackgroundGluttony,
+    4: BackgroundEnvy,
+    5: BackgroundDeath,
+    6: BackgroundVanity,
+    7: BackgroundSloth,
+};
 
 const ItemTypes = {
     ICON: "icon",
@@ -301,10 +317,10 @@ const Game: React.FC = () => {
         <DndProvider backend={HTML5Backend}>
             <MainPage
                 componentStyle={{
-                    backgroundImage: `url(${gameBackground})`,
+                    backgroundImage: `url(${backgrounds[godId] || BackgroundDeath})`,
                     backgroundSize: "cover",
                 }}
-            >
+                >
                 <div
                     style={{
                         display: "flex",
