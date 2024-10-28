@@ -9,7 +9,18 @@ const RockPaperScissors: React.FC<{
     openRps: boolean;
     handleCloseRps: () => void;
 }> = ({ openRps, handleCloseRps }) => {
-    const style = {
+    const overlayStyle = {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        backdropFilter: "blur(5px)",
+        zIndex: 1,
+    };
+
+    const modalStyle = {
         position: "absolute",
         top: "50%",
         left: "50%",
@@ -24,33 +35,10 @@ const RockPaperScissors: React.FC<{
         zIndex: 2,
     };
 
-    const overlayStyle = {
-        position: "fixed",
-        top: 0,
-        left: 0,
-        width: "100%",
-        height: "100%",
-        backgroundColor: "rgba(0, 0, 0, 0.7)",
-        backdropFilter: "blur(5px)", // Added blur effect to the overlay
-        zIndex: 1,
-    };
-
     const RockPaperScissorsData = [
-        {
-            id: 1,
-            name: "Rock",
-            image: Rock,
-        },
-        {
-            id: 2,
-            name: "Paper",
-            image: Paper,
-        },
-        {
-            id: 3,
-            name: "Scissors",
-            image: Scissors,
-        },
+        { id: 1, name: "Rock", image: Rock },
+        { id: 2, name: "Paper", image: Paper },
+        { id: 3, name: "Scissors", image: Scissors },
     ];
 
     const { socket, rpsResult } = usePlayerPosition();
@@ -72,14 +60,12 @@ const RockPaperScissors: React.FC<{
     };
 
     const getNameFromId = (id: number) => {
-        const selected = RockPaperScissorsData.find((data) => data.id === id);
-        return selected?.name;
+        return RockPaperScissorsData.find((data) => data.id === id)?.name;
     };
 
     const handleSend = (id: number | null) => {
         if (id) {
-            const name: string = getNameFromId(id) || "";
-            const move = name.toLowerCase();
+            const move = getNameFromId(id)?.toLowerCase() || "";
             socket.emit("rps:select", { move });
         }
     };
@@ -97,17 +83,27 @@ const RockPaperScissors: React.FC<{
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
-                <Box sx={style}>
+                <Box sx={modalStyle}>
                     <h2 style={{ color: "#ffffff", textAlign: "center", fontSize: "2rem", fontFamily: "fantasy", marginBottom: "20px" }}>
                         Choose Your Move
                     </h2>
-                    <div
-                        style={{
-                            display: "flex",
-                            justifyContent: "space-around",
-                            gap: 40,
-                        }}
-                    >
+                    <div style={{
+                        position: "absolute",
+                        width: "100%",
+                        top: "-80%",
+                        left: "50%",
+                        transform: "translateX(-50%)",
+                        color: "#1E90FF",
+                        fontFamily: "fantasy",
+                        fontSize: "4rem",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        textShadow: "2px 2px 0 rgba(0, 0, 0, 0.7)",
+                        animation: "pulse 1.5s infinite" // Apply the pulse animation
+                    }}>
+                        A mortal strikes the divine! Let them pay the price of their audacity!
+                    </div>
+                    <div style={{ display: "flex", justifyContent: "space-around", gap: 40 }}>
                         {RockPaperScissorsData.map((dataRps) => (
                             <div
                                 key={dataRps.id}
@@ -115,10 +111,7 @@ const RockPaperScissors: React.FC<{
                                 style={{
                                     width: "30%",
                                     cursor: "pointer",
-                                    border:
-                                        selectedId === dataRps.id
-                                            ? "3px solid #ffffff"
-                                            : "3px solid transparent",
+                                    border: selectedId === dataRps.id ? "3px solid #ffffff" : "3px solid transparent",
                                     borderRadius: "15px",
                                     transition: "border 0.2s ease, transform 0.2s ease",
                                     backgroundColor: selectedId === dataRps.id ? "#444" : "transparent",
