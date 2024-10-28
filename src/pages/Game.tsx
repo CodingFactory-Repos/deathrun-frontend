@@ -12,7 +12,7 @@ import CrossBowLeft from "../assets/images/crossbow_side_left.png";
 import CrossBowRight from "../assets/images/crossbow_side_right.png";
 import CrossBowUp from "../assets/images/crossbow_up.png";
 import BearTrap from "../assets/images/bear_trap.png";
-import SpikeTrap from "../assets/images/spike_trap.gif";
+import SpikeTrap from "../assets/images/spike_trap.png";
 import toast from "react-hot-toast";
 import { GameInfoHover, RoomInformations } from "../types/RoomTypes.ts";
 //import gameBackground from "../assets/images/game_background.gif";
@@ -40,6 +40,7 @@ const backgrounds: Record<number, string> = {
 import StartButton from "../components/StartButton.tsx";
 import GameInfo from "../components/GameInfo.tsx";
 import FrameDisplay from "../components/FrameDisplay.tsx";
+import DeathModal from "../components/DeathModal.tsx";
 
 const ItemTypes = {
     ICON: "icon",
@@ -235,7 +236,7 @@ const GameRows = ({
 };
 
 const Game: React.FC = () => {
-    const { position, socket, traps, showPlayer, rpsStart } =
+    const { position, socket, traps, showPlayer, rpsStart, userDeath } =
         usePlayerPosition();
     const location = useLocation();
     const navigate = useNavigate();
@@ -431,6 +432,10 @@ const Game: React.FC = () => {
                         <RockPaperScissors
                             openRps={openRps}
                             handleCloseRps={handleCloseRps}
+                        />
+                        <DeathModal
+                            open={userDeath}
+                            roomInformations={roomInformations}
                         />
                     </div>
                 </div>
