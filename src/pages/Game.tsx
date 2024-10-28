@@ -12,6 +12,7 @@ import CrossBowLeft from "../assets/images/crossbow_side_left.png";
 import CrossBowRight from "../assets/images/crossbow_side_right.png";
 import CrossBowUp from "../assets/images/crossbow_up.png";
 import BearTrap from "../assets/images/bear_trap.png";
+import SpikeTrap from "../assets/images/spike_trap.gif";
 import toast from "react-hot-toast";
 import { GameInfoHover, RoomInformations } from "../types/RoomTypes.ts";
 import gameBackground from "../assets/images/game_background.gif";
@@ -37,6 +38,18 @@ const iconsData: TrapItem[] = [
                 image: CrossBowLeft,
                 trapType: "crossbow_side_left_prefab",
             },
+            {
+                image: CrossBowUp,
+                trapType: "crossbow_up_prefab",
+            },
+            {
+                image: CrossBowRight,
+                trapType: "crossbow_side_right_prefab",
+            },
+            {
+                image: CrossBowDown,
+                trapType: "crossbow_down_prefab",
+            },
         ],
     },
     {
@@ -53,27 +66,16 @@ const iconsData: TrapItem[] = [
     },
     {
         id: 3,
-        label: "CrossBow",
-        cost: 5,
+        label: "Spike Trap",
+        description: "",
+        cost: 3,
         trapData: [
             {
-                image: CrossBowLeft,
-                trapType: "crossbow_side_left_prefab",
-            },
-            {
-                image: CrossBowUp,
-                trapType: "crossbow_up_prefab",
-            },
-            {
-                image: CrossBowRight,
-                trapType: "crossbow_side_right_prefab",
-            },
-            {
-                image: CrossBowDown,
-                trapType: "crossbow_down_prefab",
+                image: SpikeTrap,
+                trapType: "spike_prefab",
             },
         ],
-    },
+    }
 ];
 
 const Cell = ({
@@ -130,10 +132,10 @@ const Cell = ({
                 backgroundColor: hasProps
                     ? "gray"
                     : hasTraps
-                      ? "rgba(255,255,255,0.8)"
-                      : isOver
-                        ? "lightgreen"
-                        : "rgba(255,255,255,0.8)",
+                        ? "rgba(255,255,255,0.8)"
+                        : isOver
+                            ? "lightgreen"
+                            : "rgba(255,255,255,0.8)",
                 pointerEvents:
                     hasProps || hasTraps || hasPlayer ? "none" : "auto",
             }}
@@ -246,8 +248,8 @@ const Game: React.FC = () => {
                 data:
                     | RoomInformations
                     | {
-                          error: string;
-                      }
+                        error: string;
+                    }
             ) => {
                 if ("error" in data) {
                     toast.error(data.error);
