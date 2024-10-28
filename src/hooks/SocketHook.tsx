@@ -16,18 +16,11 @@ function usePlayerPosition() {
     const [roomDeleted, setRoomDeleted] = useState(false);
     const [userDeath, setUserDeath] = useState(false);
 
+
     useEffect(() => {
         function onConnect() {
             // console.log("Connected");
             setIsConnected(true);
-
-            // socket.emit("traps:request", {
-            //   x: 1,
-            //   y: 4,
-            //   trapType: "crossbow_down_prefab",
-            // });
-            //
-            // console.log("traps:request");
         }
 
         function onDisconnect() {
