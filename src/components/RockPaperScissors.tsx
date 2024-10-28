@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import Rock from "../assets/images/Rock.png";
 import Paper from "../assets/images/Paper.png";
 import Scissors from "../assets/images/Scissors.png";
-import { Box, Modal, Snackbar, Alert } from "@mui/material";
+import { Box, Modal } from "@mui/material";
 import usePlayerPosition from "../hooks/SocketHook";
+import toast from "react-hot-toast";
 
 const RockPaperScissors: React.FC<{
     openRps: boolean;
@@ -32,13 +33,12 @@ const RockPaperScissors: React.FC<{
 
     const { socket, rpsResult } = usePlayerPosition();
     const [selectedId, setSelectedId] = useState<number | null>(null);
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [resultMessage, setResultMessage] = useState<string | null>(null);
 
     useEffect(() => {
         if (rpsResult) {
-            setResultMessage(`Result: ${rpsResult.result}`);
-            setOpenSnackbar(true);
+            toast.dismiss();
+            toast(`Opponent selected ${rpsResult.move}`);
+            toast(`${rpsResult.result}`);
         }
     }, [rpsResult]);
 
@@ -46,6 +46,7 @@ const RockPaperScissors: React.FC<{
         setSelectedId(id);
         handleSend(id);
         handleCloseRps();
+        toast.loading("Waiting for opponent...");
     };
 
     const getNameFromId = (id: number) => {
@@ -57,10 +58,6 @@ const RockPaperScissors: React.FC<{
             const move = getNameFromId(id)?.toLowerCase() || "";
             socket.emit("rps:select", { move });
         }
-    };
-
-    const handleCloseSnackbar = () => {
-        setOpenSnackbar(false);
     };
 
     return (
@@ -179,16 +176,6 @@ const RockPaperScissors: React.FC<{
                     </div>
                 </Box>
             </Modal>
-
-            <Snackbar
-                open={openSnackbar}
-                autoHideDuration={6000}
-                onClose={handleCloseSnackbar}
-            >
-                <Alert onClose={handleCloseSnackbar} severity="info">
-                    {resultMessage}
-                </Alert>
-            </Snackbar>
         </>
     );
 };
