@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Rock from "../assets/images/Rock.png";
 import Paper from "../assets/images/Paper.png";
 import Scissors from "../assets/images/Scissors.png";
-import { Box, Button, Modal, Snackbar, Alert } from "@mui/material";
+import { Box, Modal, Snackbar, Alert } from "@mui/material";
 import usePlayerPosition from "../hooks/SocketHook";
 
 const RockPaperScissors: React.FC<{
@@ -14,11 +14,25 @@ const RockPaperScissors: React.FC<{
         top: "50%",
         left: "50%",
         transform: "translate(-50%, -50%)",
-        minWidth: 400,
-        bgcolor: "background.paper",
-        borderRadius: "10px",
-        boxShadow: 24,
+        width: "60%",
+        bgcolor: "rgba(30, 30, 30, 0.9)",
+        borderRadius: "20px",
+        boxShadow: "0 4px 30px rgba(0, 0, 0, 0.1)",
         p: 4,
+        backdropFilter: "blur(10px)",
+        border: "2px solid #ffffff",
+        zIndex: 2,
+    };
+
+    const overlayStyle = {
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        backgroundColor: "rgba(0, 0, 0, 0.7)",
+        backdropFilter: "blur(5px)", // Added blur effect to the overlay
+        zIndex: 1,
     };
 
     const RockPaperScissorsData = [
@@ -45,7 +59,6 @@ const RockPaperScissors: React.FC<{
     const [resultMessage, setResultMessage] = useState<string | null>(null);
 
     useEffect(() => {
-        console.log(rpsResult);
         if (rpsResult) {
             setResultMessage(`Result: ${rpsResult.result}`);
             setOpenSnackbar(true);
@@ -77,18 +90,22 @@ const RockPaperScissors: React.FC<{
 
     return (
         <>
+            {openRps && <div style={overlayStyle} />}
             <Modal
                 open={openRps}
-                onClose={handleCloseRps}
+                onClose={() => { }}
                 aria-labelledby="modal-modal-title"
                 aria-describedby="modal-modal-description"
             >
                 <Box sx={style}>
+                    <h2 style={{ color: "#ffffff", textAlign: "center", fontSize: "2rem", fontFamily: "fantasy", marginBottom: "20px" }}>
+                        Choose Your Move
+                    </h2>
                     <div
                         style={{
                             display: "flex",
-                            justifyContent: "space-between",
-                            gap: 60,
+                            justifyContent: "space-around",
+                            gap: 40,
                         }}
                     >
                         {RockPaperScissorsData.map((dataRps) => (
@@ -100,26 +117,40 @@ const RockPaperScissors: React.FC<{
                                     cursor: "pointer",
                                     border:
                                         selectedId === dataRps.id
-                                            ? "3px solid #2196f3"
+                                            ? "3px solid #ffffff"
                                             : "3px solid transparent",
-                                    borderRadius: "8px",
-                                    transition: "border 0.1s ease",
+                                    borderRadius: "15px",
+                                    transition: "border 0.2s ease, transform 0.2s ease",
+                                    backgroundColor: selectedId === dataRps.id ? "#444" : "transparent",
+                                    padding: "20px",
+                                    textAlign: "center",
+                                    boxShadow: "0 4px 10px rgba(0, 0, 0, 0.3)",
+                                    position: "relative",
                                 }}
                             >
                                 <img
                                     src={dataRps.image}
                                     alt={dataRps.name}
                                     style={{
-                                        width: 120,
-                                        height: 120,
+                                        width: 150,
+                                        height: 150,
+                                        transition: "transform 0.2s ease",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                        e.currentTarget.style.transform = "scale(1.1)";
+                                    }}
+                                    onMouseLeave={(e) => {
+                                        e.currentTarget.style.transform = "scale(1)";
                                     }}
                                 />
+                                <p style={{ color: "#ffffff", marginTop: "10px", fontSize: "2.5rem", fontFamily: "fantasy" }}>
+                                    {dataRps.name}
+                                </p>
                             </div>
                         ))}
                     </div>
                 </Box>
             </Modal>
-
 
             <Snackbar
                 open={openSnackbar}
