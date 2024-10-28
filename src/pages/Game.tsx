@@ -12,16 +12,35 @@ import CrossBowLeft from "../assets/images/crossbow_side_left.png";
 import CrossBowRight from "../assets/images/crossbow_side_right.png";
 import CrossBowUp from "../assets/images/crossbow_up.png";
 import BearTrap from "../assets/images/bear_trap.png";
-import SpikeTrap from "../assets/images/spike_trap.gif";
+import SpikeTrap from "../assets/images/spike_trap.png";
 import toast from "react-hot-toast";
 import { GameInfoHover, RoomInformations } from "../types/RoomTypes.ts";
-import gameBackground from "../assets/images/game_background.gif";
+//import gameBackground from "../assets/images/game_background.gif";
 import { TrapDrop, TrapItem } from "../types/TrapTypes.ts";
 import RockPaperScissors from "../components/RockPaperScissors.tsx";
 // import { Button } from "@mui/material";
+import BackgroundDeath from "../assets/images/gods/DeathBackground.gif";
+import BackgroundChaos from "../assets/images/gods/ChaosBackground.jpg";
+//import BackgroundGluttony from "../assets/images/gods/GluttonyBackground.png";
+import BackgroundGluttony from "../assets/images/gods/GluttonyBackground.gif";
+import BackgroundEnvy from "../assets/images/gods/EnvyBackground.png";
+import BackgroundVanity from "../assets/images/gods/VanityBackground.png";
+import BackgroundGreed from "../assets/images/gods/GreedBackground.png";
+import BackgroundSloth from "../assets/images/gods/SlothBackground.png";
+
+const backgrounds: Record<number, string> = {
+    1: BackgroundGreed,
+    2: BackgroundChaos,
+    3: BackgroundGluttony,
+    4: BackgroundEnvy,
+    5: BackgroundDeath,
+    6: BackgroundVanity,
+    7: BackgroundSloth,
+};
 import StartButton from "../components/StartButton.tsx";
 import GameInfo from "../components/GameInfo.tsx";
 import FrameDisplay from "../components/FrameDisplay.tsx";
+import DeathModal from "../components/DeathModal.tsx";
 
 const ItemTypes = {
     ICON: "icon",
@@ -75,7 +94,7 @@ const iconsData: TrapItem[] = [
                 trapType: "spike_prefab",
             },
         ],
-    }
+    },
 ];
 
 const Cell = ({
@@ -132,10 +151,10 @@ const Cell = ({
                 backgroundColor: hasProps
                     ? "gray"
                     : hasTraps
-                        ? "rgba(255,255,255,0.8)"
-                        : isOver
-                            ? "lightgreen"
-                            : "rgba(255,255,255,0.8)",
+                      ? "rgba(255,255,255,0.8)"
+                      : isOver
+                        ? "lightgreen"
+                        : "rgba(255,255,255,0.8)",
                 pointerEvents:
                     hasProps || hasTraps || hasPlayer ? "none" : "auto",
             }}
@@ -217,7 +236,7 @@ const GameRows = ({
 };
 
 const Game: React.FC = () => {
-    const { isConnected, position, socket, traps, showPlayer, rpsStart } =
+    const { position, socket, traps, showPlayer, rpsStart, userDeath } =
         usePlayerPosition();
     const location = useLocation();
     const navigate = useNavigate();
@@ -229,11 +248,6 @@ const Game: React.FC = () => {
         useState<RoomInformations | null>(null);
 
     const { godId } = location.state ? location.state : { godId: 0 };
-
-    console.log("Position", position);
-    console.log("isConnected", isConnected);
-    console.log("Props", props);
-    // console.log("godId", godId);
 
     useEffect(() => {
         if (traps) {
@@ -254,15 +268,15 @@ const Game: React.FC = () => {
                 data:
                     | RoomInformations
                     | {
-                        error: string;
-                    }
+                          error: string;
+                      }
             ) => {
                 if ("error" in data) {
                     toast.error(data.error);
                     navigate("/");
                 } else {
                     setRoomInformations(data);
-                    console.log("Joined room", roomInformations);
+                    // console.log("Joined room", roomInformations);
 
                     setProps(data?.props || []);
                     setTrapsList(data?.traps || []);
@@ -272,7 +286,6 @@ const Game: React.FC = () => {
                         setRoomInformations(data);
                         setTrapsList(data?.traps);
                         setProps(data?.props);
-                        console.log("Room events", roomInformations);
                     });
                 }
 
@@ -291,12 +304,9 @@ const Game: React.FC = () => {
         }
     }, []);
 
-    console.log("Room informations1", roomInformations);
-    // console.log("godId", godId);
-
     const handleDrop = (x: number, y: number, item: TrapDrop) => {
-        console.log(`Item ${item.id} dropped on cell (x: ${x}, y: ${y})`);
-        console.log("Item", item);
+        // console.log(`Item ${item.id} dropped on cell (x: ${x}, y: ${y})`);
+        // console.log("Item", item);
         socket.emit("traps:request", {
             x: x,
             y: y,
@@ -317,7 +327,9 @@ const Game: React.FC = () => {
         <DndProvider backend={HTML5Backend}>
             <MainPage
                 componentStyle={{
-                    backgroundImage: `url(${gameBackground})`,
+                    backgroundImage: `url(${
+                        backgrounds[godId] || BackgroundDeath
+                    })`,
                     backgroundSize: "cover",
                 }}
             >
@@ -403,7 +415,13 @@ const Game: React.FC = () => {
                             >
                                 <Chat socket={socket} />
                                 {roomInformations?.started === false && (
-                                    <StartButton socket={socket} />
+                                    <StartButton
+                                        socket={socket}
+                                        roomInformations={roomInformations}
+                                        setRoomInformations={
+                                            setRoomInformations
+                                        }
+                                    />
                                 )}
                             </div>
                         </div>
@@ -414,6 +432,10 @@ const Game: React.FC = () => {
                         <RockPaperScissors
                             openRps={openRps}
                             handleCloseRps={handleCloseRps}
+                        />
+                        <DeathModal
+                            open={userDeath}
+                            roomInformations={roomInformations}
                         />
                     </div>
                 </div>
