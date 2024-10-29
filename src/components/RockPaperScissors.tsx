@@ -37,7 +37,7 @@ const RockPaperScissors: React.FC<{
     useEffect(() => {
         if (rpsResult) {
             toast.dismiss();
-            toast(`Opponent selected ${rpsResult.move}`);
+            // toast(`Opponent selected ${rpsResult.move}`);
             toast(`${rpsResult.result}`);
         }
     }, [rpsResult]);

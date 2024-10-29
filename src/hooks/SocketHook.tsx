@@ -16,7 +16,6 @@ function usePlayerPosition() {
     const [roomDeleted, setRoomDeleted] = useState(false);
     const [userDeath, setUserDeath] = useState(false);
 
-
     useEffect(() => {
         function onConnect() {
             // console.log("Connected");
@@ -62,23 +61,15 @@ function usePlayerPosition() {
         }
 
         function onRoomDeleted() {
-            console.log("Room deleted");
             setRoomDeleted(true);
         }
 
         function onUserDeath() {
-            console.log("User death");
             setUserDeath(true);
         }
 
-        function onGameStart() {
-            console.log("Game start");
-        }
-
-        function onRoomsEvent(data: any) {
-            console.log("Rooms event", data);
-        }
-
+        function onGameStart() {}
+        
         socket.on("connect", onConnect);
         socket.on("disconnect", onDisconnect);
         socket.on("players:move", onPositionChange);
@@ -93,7 +84,6 @@ function usePlayerPosition() {
         socket.on("rooms:deleted", onRoomDeleted);
         socket.on("user:death", onUserDeath);
         socket.on("rooms:start", onGameStart);
-        socket.on("rooms:events", onRoomsEvent);
     }, []);
 
     return {

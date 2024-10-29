@@ -10,22 +10,27 @@ const ItemTypes = {
 const Icon = ({
     icon,
     onHoverTrap,
+    spendingLimit,
 }: {
     icon: TrapItem;
     onHoverTrap: (icon: TrapItem | null) => void;
+    spendingLimit: number;
 }) => {
     const [currentTrapIndex, setCurrentTrapIndex] = useState(0);
     const currentTrap = icon.trapData[currentTrapIndex];
+
+    const canDrag = spendingLimit >= icon.cost;
 
     const [{ isDragging }, drag, preview] = useDrag(
         () => ({
             type: ItemTypes.ICON,
             item: { id: icon.id, trapData: currentTrap },
+            canDrag: () => canDrag,
             collect: (monitor) => ({
                 isDragging: !!monitor.isDragging(),
             }),
         }),
-        [currentTrap]
+        [currentTrap, canDrag]
     );
 
     const handleTrapChange = () => {
@@ -43,12 +48,13 @@ const Icon = ({
                 onMouseLeave={() => onHoverTrap(null)}
                 style={{
                     opacity: isDragging ? 0.5 : 1,
-                    fontSize: "2rem",
-                    cursor: "move",
+                    cursor: canDrag ? "move" : "not-allowed",
                     display: "flex",
                     alignItems: "center",
                     justifyContent: "center",
-                    border: "1px solid rgba(0, 0, 0, 0.2)",
+                    border: `1px solid ${
+                        canDrag ? "rgba(0, 0, 0, 0.5)" : "red"
+                    }`,
                     borderRadius: "5px",
                     padding: "10px",
                     marginBottom: "10px",
@@ -92,7 +98,14 @@ const Icon = ({
     );
 };
 
-const TrapBlock: React.FC<TrapContainer> = ({ trapItem, onHoverTrap }) => {
+const TrapBlock: React.FC<TrapContainer> = ({
+    trapItem,
+    onHoverTrap,
+    roomInformations,
+    godId,
+}) => {
+    const currentGod = roomInformations?.gods?.find((god) => god.god === godId);
+    const spendingLimit = currentGod ? currentGod.spendingLimit : 0;
     return (
         <div>
             <div
@@ -119,6 +132,7 @@ const TrapBlock: React.FC<TrapContainer> = ({ trapItem, onHoverTrap }) => {
                             key={icon.id}
                             icon={icon}
                             onHoverTrap={onHoverTrap}
+                            spendingLimit={spendingLimit}
                         />
                     ))}
                 </div>
