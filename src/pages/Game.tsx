@@ -390,6 +390,8 @@ const Game: React.FC = () => {
                             <TrapBlock
                                 trapItem={iconsData}
                                 onHoverTrap={setHoveredTrap}
+                                roomInformations={roomInformations}
+                                godId={godId}
                             />
                             {roomInformations !== null ? (
                                 <GameInfo

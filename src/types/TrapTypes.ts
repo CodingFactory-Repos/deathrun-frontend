@@ -1,8 +1,10 @@
-import { GameInfoHover } from "./RoomTypes.ts";
+import { GameInfoHover, RoomInformations } from "./RoomTypes.ts";
 
 export interface TrapContainer {
     trapItem: TrapItem[];
     onHoverTrap: (icon: TrapItem | null) => void;
+    roomInformations: RoomInformations | null;
+    godId: number;
 }
 
 export type TrapItem = {
