@@ -18,7 +18,6 @@ const StartButton: React.FC<StartButtonProps> = ({
 }) => {
     const handleStartClick = () => {
         socket.emit("rooms:start");
-        console.log("Start button clicked, rooms:start event emitted");
         setRoomInformations({ ...roomInformations, started: true });
     };
 
